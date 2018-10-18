@@ -117,9 +117,22 @@ abstract class BaseObject
      */
     public function update()
     {
-        $result = $this->connector->doCommand($this->command . ' -u ' . $this->getId());
+        if (!$this->checkRequiredAttribute()) {
+            return false;
+        }
+        $this->connector->doCommand($this->command . ' -u' . $this->getId());
 
-        return $result;
+        foreach ($this->attributes as $property_key => $property_value) {
+            $this->connector->doCommand($property_key . ' ' . $property_value);
+        }
+        $result = $this->connector->doCommand('ok');
+        
+        if (!!strstr(strtolower($result), 'successfully updated')) {
+            return true;
+        } else {
+            $this->errors['update'] = strtolower($result);
+            return false;
+        }
     }
 
     /**
