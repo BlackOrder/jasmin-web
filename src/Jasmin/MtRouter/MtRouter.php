@@ -62,12 +62,24 @@ class MtRouter extends BaseObject
             if (!empty($ff)) {
                 $router = trim($ff);
             }
+            
+            //Get the filters
+            preg_match('~<(.*?)>~', $router, $MTfilters);
+            
+            //Fix and clean blank spaces
+            $temp_MT = explode(" ", $router);
+            $temp_MT = array_filter($temp_MT);
+            $fixed_MT = array();
+            foreach ($temp_MT as $temp){
+                array_push($fixed_MT, $temp);
+            }
+            
             $routers[] = [
                 'order'     => $router[0],
                 'type'      => $router[1],
                 'rate'      => intval($router[2]),
                 'connector' => $router[3],
-                'filters'   => $router[4],
+                'filters'   => $MTfilters[1],
             ];
         }
 
