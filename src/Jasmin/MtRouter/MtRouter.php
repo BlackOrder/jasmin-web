@@ -133,7 +133,7 @@ class MtRouter extends BaseObject
         if (!is_array($filters)) {
             throw new MtRouterException('Filters should be array');
         }
-        $this->attributes['filters'] = implode(',', $filters);
+        $this->attributes['filters'] = implode(';', $filters);
         return $this;
     }
 
@@ -142,6 +142,6 @@ class MtRouter extends BaseObject
         if (!isset($this->attributes['filters'])) {
             return [];
         }
-        return explode(',', $this->attributes['filters']);
+        return explode(';', $this->attributes['filters']);
     }
 }
