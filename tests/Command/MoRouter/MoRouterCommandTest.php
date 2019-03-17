@@ -213,6 +213,7 @@ STR;
         }
 
         if (!$this->isRealJasminServer()) {
+            $this->setUp();
             $this->session->method('runCommand')->willReturn('Successfully');
         }
 

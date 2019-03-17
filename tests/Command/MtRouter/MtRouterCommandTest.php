@@ -67,14 +67,14 @@ STR;
             $this->session->method('runCommand')->willReturn($listStr);
 
             $list = $this->router->all();
-            $this->assertCount(5, $list);
+            $this->assertCount(4, $list);
             foreach ($list as $row) {
                 $this->assertArrayHasKey('order', $row);
                 $this->assertInternalType('int', $row['order']);
                 $this->assertArrayHasKey('type', $row);
                 $this->assertInternalType('string', $row['type']);
                 $this->assertArrayHasKey('rate', $row);
-                $this->assertInternalType('float', $row['type']);
+                $this->assertInternalType('float', $row['rate']);
                 $this->assertArrayHasKey('connectors', $row);
                 $this->assertInternalType('array', $row['connectors']);
                 $this->assertArrayHasKey('filters', $row);
@@ -124,8 +124,6 @@ STR;
         ];
 
         $this->assertTrue($this->router->add($data, $errstr), $errstr);
-
-
     }
 
     /**
@@ -149,15 +147,19 @@ STR;
         $this->assertArrayHasKey('type', $row);
         $this->assertInternalType('string', $row['type']);
         $this->assertArrayHasKey('rate', $row);
-        $this->assertInternalType('float', $row['type']);
+        $this->assertInternalType('float', $row['rate']);
         $this->assertArrayHasKey('connectors', $row);
         $this->assertInternalType('array', $row['connectors']);
         $this->assertArrayHasKey('filters', $row);
         $this->assertInternalType('array', $row['filters']);
 
-        $this->testRemoveRoute(0);
+        $this->testRemoveRoute(99);
 
         $this->assertTrue((new Group($this->session))->remove('jG1'));
+
+        $this->assertTrue((new Filter($this->session))->remove('jFilter1'));
+
+        $this->assertTrue((new Connector($this->session))->remove('smpp-01'));
     }
 
     /**
@@ -173,11 +175,11 @@ STR;
 
         $this->assertTrue((new Connector($this->session))->add([
             'cid' => 'smpp-01'
-        ]));
+        ], $errstr), $errstr);
 
         $data = [
             'type' => MtRouter::DEFAULT,
-            'order' => 10,
+            'order' => 0,
             'rate' => 0,
             'connector' => 'smppc(smpp-01)'
         ];
@@ -206,7 +208,7 @@ STR;
         $this->assertArrayHasKey('type', $row);
         $this->assertInternalType('string', $row['type']);
         $this->assertArrayHasKey('rate', $row);
-        $this->assertInternalType('float', $row['type']);
+        $this->assertInternalType('float', $row['rate']);
         $this->assertArrayHasKey('connectors', $row);
         $this->assertInternalType('array', $row['connectors']);
         $this->assertArrayHasKey('filters', $row);
@@ -228,6 +230,7 @@ STR;
         }
 
         if (!$this->isRealJasminServer()) {
+            $this->setUp();
             $this->session->method('runCommand')->willReturn('Successfully');
         }
 

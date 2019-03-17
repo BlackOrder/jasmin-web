@@ -81,6 +81,14 @@ class MtRouter extends BaseCommand
     /**
      * {@inheritdoc}
      */
+    protected function isNeedPersist(): bool
+    {
+        return true;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function prepareAttributes(array $data): array
     {
         if (isset($data['filters']) && !empty($data['filters'])) {
