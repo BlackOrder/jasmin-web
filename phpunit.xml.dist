@@ -14,7 +14,7 @@
         <!--<env name="jasmin_admin_port" value=""/>-->
         <!--<env name="jasmin_admin_username" value=""/>-->
         <!--<env name="jasmin_admin_password" value=""/>-->
-        <env name="jasmin_read_write_wait_time" value="50000"/>
+        <env name="jasmin_read_write_wait_time" value="100000"/>
         <!-- Uncomment if need run test on real server-->
         <!--<env name="jasmin_real_server" value="1" />-->
     </php>
@@ -32,11 +32,20 @@
         <testsuite name="Command/User">
             <directory>tests/Command/User</directory>
         </testsuite>
+        <testsuite name="Command/Filter">
+            <directory>tests/Command/Filter</directory>
+        </testsuite>
         <testsuite name="Command/Smpp">
             <directory>tests/Command/SmppConnector</directory>
         </testsuite>
-        <testsuite name="Command/Filter">
-            <directory>tests/Command/Filter</directory>
+        <testsuite name="Command/Http">
+            <directory>tests/Command/HttpConnector</directory>
+        </testsuite>
+        <testsuite name="Command/MoRouter">
+            <directory>tests/Command/MoRouter</directory>
+        </testsuite>
+        <testsuite name="Command/MtRouter">
+            <directory>tests/Command/MtRouter</directory>
         </testsuite>
     </testsuites>
 

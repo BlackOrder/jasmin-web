@@ -12,7 +12,7 @@ class MoRouter extends BaseCommand
      */
     protected function getAddValidator(): AddValidator
     {
-        // TODO: Implement getAddValidator() method.
+        return new MoRouterBaseAddValidator();
     }
 
     protected function getName(): string
@@ -40,7 +40,7 @@ class MoRouter extends BaseCommand
 
             $row = [
                 'order'     => (int)array_shift($fixed_routers),
-                'type'      => (int)array_shift($fixed_routers),
+                'type'      => array_shift($fixed_routers),
                 'connectors' => [],
                 'filters'   => [],
             ];
@@ -61,5 +61,23 @@ class MoRouter extends BaseCommand
         }
 
         return $routers;
+    }
+
+    protected function isHeavy(): bool
+    {
+        return true;
+    }
+
+    public function prepareAttributes(array $data): array
+    {
+        if (isset($data['filters']) && !empty($data['filters'])) {
+            $data['filters'] = implode(';', $data['filters']);
+        }
+
+        if (isset($data['connectors']) && !empty($data['filters'])) {
+            $data['connectors'] = implode(';', $data['connectors']);
+        }
+
+        return $data;
     }
 }
