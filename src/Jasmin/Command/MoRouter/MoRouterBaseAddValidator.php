@@ -18,9 +18,9 @@ class MoRouterBaseAddValidator extends InternalAddValidator
     protected function resolveValidator(array $data): ?AddValidator
     {
         switch (strtolower($data['type'])) {
-            case 'defaultroute':
+            case MoRouter::DEFAULT:
                 return new DefaultMoRouteValidator();
-            case 'staticmoroute':
+            case MoRouter::STATIC:
                 return new StaticMoRouteValidator();
             default:
                 return null;

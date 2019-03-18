@@ -7,6 +7,9 @@ use JasminWeb\Jasmin\Command\BaseCommand;
 
 class MoRouter extends BaseCommand
 {
+    public const DEFAULT = 'defaultroute';
+    public const STATIC = 'staticmoroute';
+
     /**
      * @return AddValidator
      */
