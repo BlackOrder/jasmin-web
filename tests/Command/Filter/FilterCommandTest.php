@@ -4,6 +4,7 @@ namespace JasminWeb\Test\Command\Filter;
 
 use JasminWeb\Jasmin\Command\Filter\Filter;
 use JasminWeb\Jasmin\Command\Group\Group;
+use JasminWeb\Jasmin\Command\SmppConnector\Connector;
 use JasminWeb\Jasmin\Command\User\User;
 use JasminWeb\Test\Command\BaseCommandTest;
 
@@ -132,20 +133,70 @@ STR;
         $row = array_shift($list);
         $this->assertEquals('jTestF1', $row['fid']);
         $this->assertEquals('UserFilter', $row['type']);
+
+        $this->removeFilter('jTestF1');
+
+        $this->assertTrue((new Group($this->session))->remove('jTestG1'));
     }
 
     /**
      * @depends testListAfterAddUserFilter
      */
-    public function testRemoveFilter(): void
+    public function testAddConnectorFilter(): void
+    {
+        if (!$this->isRealJasminServer()) {
+            $this->session->method('runCommand')->willReturn('Successfully added');
+        }
+
+        $this->assertTrue((new Connector($this->session))->add([
+            'cid' => 'jTestC1',
+        ]));
+
+        $errstr = '';
+        $this->assertTrue($this->filter->add([
+            'type' => Filter::CONNECTOR,
+            'cid' => 'jTestC1',
+            'fid' => 'jTestF1'
+        ], $errstr), $errstr);
+    }
+
+    /**
+     * @depends testAddConnectorFilter
+     */
+    public function testListAfterAddConnectorFilter(): void
+    {
+        if (!$this->isRealJasminServer()) {
+            $listStr = <<<STR
+#Filter id        Type                   Routes Description
+#jTestF1              ConnectorFilter             MT     <C (cid=JTestC1)>
+Total Filters: 1
+STR;
+
+            $this->session->method('runCommand')->willReturn($listStr);
+        }
+
+        $list = $this->filter->all();
+        $this->assertCount(1, $list);
+
+        $row = array_shift($list);
+        $this->assertEquals('jTestF1', $row['fid']);
+        $this->assertEquals('ConnectorFilter', $row['type']);
+
+        $this->removeFilter('jTestF1');
+
+        $this->assertTrue((new Connector($this->session))->remove('jTestC1'));
+    }
+
+    /**
+     * @param string $key
+     */
+    public function removeFilter(string $key): void
     {
         if (!$this->isRealJasminServer()) {
             $this->session->method('runCommand')->willReturn('Successfully');
         }
 
-        $this->assertTrue($this->filter->remove('jTestF1'));
+        $this->assertTrue($this->filter->remove($key));
         $this->testEmptyList();
-
-        (new Group($this->session))->remove('jTestG1');
     }
 }

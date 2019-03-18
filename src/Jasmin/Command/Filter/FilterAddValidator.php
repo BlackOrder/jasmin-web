@@ -25,6 +25,9 @@ class FilterAddValidator extends InternalAddValidator
             case Filter::USER:
                 $validator = new UserFilterAddValidator();
                 break;
+            case Filter::CONNECTOR:
+                $validator = new ConnectorFilterValidator();
+                break;
             case Filter::TRANSPARENT:
                 $validator = new class extends AddValidator {
                     /**

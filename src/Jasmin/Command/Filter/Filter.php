@@ -9,6 +9,7 @@ class Filter extends BaseCommand
 {
     public const TRANSPARENT = 'transparentfilter';
     public const USER = 'userfilter';
+    public const CONNECTOR = 'connectorfilter';
 
     /**
      * @return AddValidator
