@@ -5,30 +5,17 @@ namespace JasminWeb\Test\Command\Filter;
 use JasminWeb\Jasmin\Command\Filter\Filter;
 use JasminWeb\Jasmin\Command\Group\Group;
 use JasminWeb\Jasmin\Command\User\User;
-use JasminWeb\Jasmin\Connection\Session;
-use JasminWeb\Test\BaseTest;
-use PHPUnit\Framework\MockObject\MockObject;
+use JasminWeb\Test\Command\BaseCommandTest;
 
-class FilterCommandTest extends BaseTest
+class FilterCommandTest extends BaseCommandTest
 {
-    /**
-     * @var MockObject|Session
-     */
-    private $session;
-
     /**
      * @var Filter
      */
     private $filter;
 
-    public function setUp()
+    protected function initCommand(): void
     {
-        if (!$this->session && $this->isRealJasminServer()) {
-            $this->session = $this->getSession();
-        } else {
-            $this->session = $this->getSessionMock();
-        }
-
         $this->filter = new Filter($this->session);
     }
 
@@ -44,7 +31,7 @@ STR;
 
         $list = $this->filter->all();
 
-        $this->assertEmpty($list);
+        $this->assertEmpty($list, json_encode($list));
     }
 
     /**

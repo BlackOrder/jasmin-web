@@ -117,7 +117,7 @@ class Session
      */
     public function persist(): void
     {
-        $this->runCommand('persist ' . $this->profile);
+        $this->runCommand('persist ' . $this->profile, true);
     }
 
     /**
@@ -127,6 +127,6 @@ class Session
      */
     public function load(): void
     {
-        $this->runCommand('load ' . $this->profile);
+        $this->runCommand('load ' . $this->profile, true);
     }
 }

@@ -7,33 +7,17 @@ use JasminWeb\Jasmin\Command\Group\Group;
 use JasminWeb\Jasmin\Command\MtRouter\MtRouter;
 use JasminWeb\Jasmin\Command\SmppConnector\Connector;
 use JasminWeb\Jasmin\Command\User\User;
-use JasminWeb\Jasmin\Connection\Session;
-use JasminWeb\Test\BaseTest;
-use PHPUnit\Framework\MockObject\MockObject;
+use JasminWeb\Test\Command\BaseCommandTest;
 
-class MtRouterCommandTest extends BaseTest
+class MtRouterCommandTest extends BaseCommandTest
 {
     /**
      * @var MtRouter
      */
     private $router;
 
-    /**
-     * @var Session|MockObject
-     */
-    protected $session;
-
-    /**
-     * @throws \JasminWeb\Exception\ConnectionException
-     */
-    protected function setUp()
+    protected function initCommand(): void
     {
-        if (!$this->session && $this->isRealJasminServer()) {
-            $this->session = $this->getSession();
-        } else {
-            $this->session = $this->getSessionMock();
-        }
-
         $this->router = new MtRouter($this->session);
     }
 
@@ -153,7 +137,7 @@ STR;
         $this->assertArrayHasKey('filters', $row);
         $this->assertInternalType('array', $row['filters']);
 
-        $this->testRemoveRoute(99);
+        $this->removeRoute(99);
 
         $this->assertTrue((new Group($this->session))->remove('jG1'));
 
@@ -214,7 +198,7 @@ STR;
         $this->assertArrayHasKey('filters', $row);
         $this->assertInternalType('array', $row['filters']);
 
-        $this->testRemoveRoute(0);
+        $this->removeRoute(0);
 
         $this->assertTrue((new Connector($this->session))->remove('smpp-01'));
     }
@@ -222,13 +206,8 @@ STR;
     /**
      * @param int $key
      */
-    public function testRemoveRoute(?int $key = null): void
+    public function removeRoute(int $key): void
     {
-        if (null === $key) {
-            $this->assertTrue(true);
-            return;
-        }
-
         if (!$this->isRealJasminServer()) {
             $this->setUp();
             $this->session->method('runCommand')->willReturn('Successfully');

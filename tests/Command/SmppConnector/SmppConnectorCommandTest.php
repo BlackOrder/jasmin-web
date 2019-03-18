@@ -3,11 +3,9 @@
 namespace JasminWeb\Test\Command\SmppConnector;
 
 use JasminWeb\Jasmin\Command\SmppConnector\Connector;
-use JasminWeb\Jasmin\Connection\Session;
-use JasminWeb\Test\BaseTest;
-use PHPUnit\Framework\MockObject\MockObject;
+use JasminWeb\Test\Command\BaseCommandTest;
 
-class SmppConnectorCommandTest extends BaseTest
+class SmppConnectorCommandTest extends BaseCommandTest
 {
     /**
      * @var Connector
@@ -15,32 +13,15 @@ class SmppConnectorCommandTest extends BaseTest
     private $connector;
 
     /**
-     * @var Session|MockObject
-     */
-    protected $session;
-
-    /**
      * @var string
      */
     protected $cid = 'jTestSmppC1';
 
-    /**
-     * @throws \JasminWeb\Exception\ConnectionException
-     */
-    protected function setUp()
+    protected function initCommand(): void
     {
-        if (!$this->session && $this->isRealJasminServer()) {
-            $this->session = $this->getSession();
-        } else {
-            $this->session = $this->getSessionMock();
-        }
-
         $this->connector = new Connector($this->session);
     }
 
-    /**
-     * @throws \JasminWeb\Exception\ConnectorException
-     */
     public function testEmptyList(): void
     {
         if (!$this->isRealJasminServer()) {
@@ -58,7 +39,6 @@ STR;
     /**
      * @depends testEmptyList
      *
-     * @throws \JasminWeb\Exception\ConnectorException
      */
     public function testNotEmptyListWithFakeData(): void
     {
@@ -94,7 +74,6 @@ STR;
     /**
      * @depends testNotEmptyListWithFakeData
      *
-     * @throws \JasminWeb\Exception\ConnectorException
      */
     public function testAddConnector(): void
     {
@@ -109,7 +88,6 @@ STR;
     /**
      * @depends testAddConnector
      *
-     * @throws \JasminWeb\Exception\ConnectorException
      */
     public function testConnectorsList(): void
     {
@@ -154,7 +132,6 @@ STR;
     /**
      * @depends testStartConnector
      *
-     * @throws \JasminWeb\Exception\ConnectorException
      */
     public function testIsConnectorStarted(): void
     {
@@ -192,7 +169,6 @@ STR;
     /**
      * @depends testStopConnector
      *
-     * @throws \JasminWeb\Exception\ConnectorException
      */
     public function testIsConnectorStopped(): void
     {
@@ -215,8 +191,6 @@ STR;
 
     /**
      * @depends testIsConnectorStopped
-     *
-     * @throws \JasminWeb\Exception\ConnectorException
      */
     public function testRemoveConnector(): void
     {

@@ -5,33 +5,17 @@ namespace JasminWeb\Test\Command\MoRouter;
 use JasminWeb\Jasmin\Command\Filter\Filter;
 use JasminWeb\Jasmin\Command\HttpConnector\Connector;
 use JasminWeb\Jasmin\Command\MoRouter\MoRouter;
-use JasminWeb\Jasmin\Connection\Session;
-use JasminWeb\Test\BaseTest;
-use PHPUnit\Framework\MockObject\MockObject;
+use JasminWeb\Test\Command\BaseCommandTest;
 
-class MoRouterCommandTest extends BaseTest
+class MoRouterCommandTest extends BaseCommandTest
 {
     /**
      * @var MoRouter
      */
     private $router;
 
-    /**
-     * @var Session|MockObject
-     */
-    protected $session;
-
-    /**
-     * @throws \JasminWeb\Exception\ConnectionException
-     */
-    protected function setUp()
+    protected function initCommand(): void
     {
-        if (!$this->session && $this->isRealJasminServer()) {
-            $this->session = $this->getSession();
-        } else {
-            $this->session = $this->getSessionMock();
-        }
-
         $this->router = new MoRouter($this->session);
     }
 
@@ -135,7 +119,7 @@ STR;
         $this->assertArrayHasKey('filters', $row);
         $this->assertInternalType('array', $row['filters']);
 
-        $this->testRemoveRoute(0);
+        $this->removeRoute(0);
     }
 
     /**
@@ -197,7 +181,7 @@ STR;
         $this->assertArrayHasKey('filters', $row);
         $this->assertInternalType('array', $row['filters']);
 
-        $this->testRemoveRoute(10);
+        $this->removeRoute(10);
 
         (new Filter($this->session))->remove('jFilter1');
     }
@@ -205,13 +189,8 @@ STR;
     /**
      * @param int $key
      */
-    public function testRemoveRoute(?int $key = null): void
+    public function removeRoute(int $key): void
     {
-        if (null === $key) {
-            $this->assertTrue(true);
-            return;
-        }
-
         if (!$this->isRealJasminServer()) {
             $this->setUp();
             $this->session->method('runCommand')->willReturn('Successfully');

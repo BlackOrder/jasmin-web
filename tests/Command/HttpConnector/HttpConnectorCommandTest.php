@@ -3,11 +3,9 @@
 namespace JasminWeb\Test\Command\HttpConnector;
 
 use JasminWeb\Jasmin\Command\HttpConnector\Connector;
-use JasminWeb\Jasmin\Connection\Session;
-use JasminWeb\Test\BaseTest;
-use PHPUnit\Framework\MockObject\MockObject;
+use JasminWeb\Test\Command\BaseCommandTest;
 
-class HttpConnectorCommandTest extends BaseTest
+class HttpConnectorCommandTest extends BaseCommandTest
 {
     /**
      * @var Connector
@@ -15,33 +13,16 @@ class HttpConnectorCommandTest extends BaseTest
     private $connector;
 
     /**
-     * @var Session|MockObject
-     */
-    protected $session;
-
-    /**
      * @var string
      */
     protected $cid = 'jTestHttpC1';
 
-    /**
-     * @throws \JasminWeb\Exception\ConnectionException
-     */
-    protected function setUp()
+    protected function initCommand(): void
     {
-        if (!$this->session && $this->isRealJasminServer()) {
-            $this->session = $this->getSession();
-        } else {
-            $this->session = $this->getSessionMock();
-        }
-
         $this->connector = new Connector($this->session);
     }
 
-    /**
-     * @throws \JasminWeb\Exception\ConnectorException
-     */
-    public function testEmptyList()
+    public function testEmptyList(): void
     {
         if (!$this->isRealJasminServer()) {
             $listStr = <<<STR
@@ -58,9 +39,8 @@ STR;
     /**
      * @depends testEmptyList
      *
-     * @throws \JasminWeb\Exception\ConnectorException
      */
-    public function testNotEmptyListWithFakeData()
+    public function testNotEmptyListWithFakeData(): void
     {
         if (!$this->isRealJasminServer()) {
             $listStr = <<<STR
@@ -93,7 +73,7 @@ STR;
      *
      * @throws \JasminWeb\Exception\ConnectorException
      */
-    public function testAddConnector()
+    public function testAddConnector(): void
     {
         if (!$this->isRealJasminServer()) {
             $this->session->method('runCommand')->willReturn('Successfully added');
@@ -114,9 +94,8 @@ STR;
     /**
      * @depends testAddConnector
      *
-     * @throws \JasminWeb\Exception\ConnectorException
      */
-    public function testConnectorsList()
+    public function testConnectorsList(): void
     {
         if (!$this->isRealJasminServer()) {
             $listStr = <<<STR
@@ -145,7 +124,7 @@ STR;
      *
      * @throws \JasminWeb\Exception\ConnectorException
      */
-    public function testRemoveConnector()
+    public function testRemoveConnector(): void
     {
         if (!$this->isRealJasminServer()) {
             $this->session->method('runCommand')->willReturn('Successfully');

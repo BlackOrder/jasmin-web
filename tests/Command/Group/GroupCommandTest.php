@@ -3,17 +3,10 @@
 namespace JasminWeb\Test\Command\Group;
 
 use JasminWeb\Jasmin\Command\Group\Group;
-use JasminWeb\Jasmin\Connection\Session;
-use JasminWeb\Test\BaseTest;
-use PHPUnit\Framework\MockObject\MockObject;
+use JasminWeb\Test\Command\BaseCommandTest;
 
-class GroupCommandTest extends BaseTest
+class GroupCommandTest extends BaseCommandTest
 {
-    /**
-     * @var MockObject|Session
-     */
-    private $session;
-
     /**
      * @var Group
      */
@@ -24,19 +17,8 @@ class GroupCommandTest extends BaseTest
      */
     protected $gid = 'jTestG1';
 
-    /**
-     * {@inheritdoc}
-     *
-     * @throws \JasminWeb\Exception\ConnectionException
-     */
-    protected function setUp()
+    protected function initCommand(): void
     {
-        if (!$this->session && $this->isRealJasminServer()) {
-            $this->session = $this->getSession();
-        } else {
-            $this->session = $this->getSessionMock();
-        }
-
         $this->group = new Group($this->session);
     }
 

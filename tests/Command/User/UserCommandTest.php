@@ -4,17 +4,10 @@ namespace JasminWeb\Test\Command\User;
 
 use JasminWeb\Jasmin\Command\Group\Group;
 use JasminWeb\Jasmin\Command\User\User;
-use JasminWeb\Jasmin\Connection\Session;
-use JasminWeb\Test\BaseTest;
-use PHPUnit\Framework\MockObject\MockObject;
+use JasminWeb\Test\Command\BaseCommandTest;
 
-class UserCommandTest extends BaseTest
+class UserCommandTest extends BaseCommandTest
 {
-    /**
-     * @var Session|MockObject
-     */
-    private $session;
-
     /**
      * @var User
      */
@@ -40,25 +33,14 @@ class UserCommandTest extends BaseTest
      */
     protected $password = 'jTestPD1';
 
-    /**
-     * {@inheritdoc}
-     * @throws \JasminWeb\Exception\ConnectionException
-     */
-    protected function setUp()
+    protected function initCommand(): void
     {
-        if (!$this->session && $this->isRealJasminServer()) {
-            $this->session = $this->getSession();
-        } else {
-            $this->session = $this->getSessionMock();
-        }
-
         $this->user = new User($this->session);
     }
 
     /**
-     * @throws \JasminWeb\Exception\ConnectorException
      */
-    public function testEmptyList()
+    public function testEmptyList(): void
     {
         if (!$this->isRealJasminServer()) {
             $listStr = <<<STR
@@ -72,10 +54,7 @@ STR;
         $this->assertEmpty($list);
     }
 
-    /**
-     * @throws \JasminWeb\Exception\ConnectorException
-     */
-    public function testAddUserWithoutGroupInDb()
+    public function testAddUserWithoutGroupInDb(): void
     {
         if (!$this->isRealJasminServer()) {
             $str = 'You must set User id (uid), group (gid), username and password before saving !';
@@ -93,9 +72,8 @@ STR;
 
     /**
      * @depends testAddUserWithoutGroupInDb
-     * @throws \JasminWeb\Exception\ConnectorException
      */
-    public function testAddUserWithGroup()
+    public function testAddUserWithGroup(): void
     {
         if (!$this->isRealJasminServer()) {
             $this->session->method('runCommand')->willReturn('Successfully added');
@@ -114,9 +92,8 @@ STR;
 
     /**
      * @depends testAddUserWithGroup
-     * @throws \JasminWeb\Exception\ConnectorException
      */
-    public function testUserList()
+    public function testUserList(): void
     {
         if (!$this->isRealJasminServer()) {
             $listStr = <<<STR
@@ -149,7 +126,7 @@ STR;
     /**
      * @depends testUserList
      */
-    public function testDisableUser()
+    public function testDisableUser(): void
     {
         if (!$this->isRealJasminServer()) {
             $this->session->method('runCommand')->willReturn('Successfully disabled');
@@ -162,9 +139,8 @@ STR;
     /**
      * @depends testDisableUser
      *
-     * @throws \JasminWeb\Exception\ConnectorException
      */
-    public function testIsDisabledUser()
+    public function testIsDisabledUser(): void
     {
         if (!$this->isRealJasminServer()) {
             $listStr = <<<STR
@@ -183,7 +159,7 @@ STR;
     /**
      * @depends testIsDisabledUser
      */
-    public function testEnableUser()
+    public function testEnableUser(): void
     {
         if (!$this->isRealJasminServer()) {
             $this->session->method('runCommand')->willReturn('Successfully enabled');
@@ -195,9 +171,8 @@ STR;
     /**
      * @depends testEnableUser
      *
-     * @throws \JasminWeb\Exception\ConnectorException
      */
-    public function testIsEnabledUser()
+    public function testIsEnabledUser(): void
     {
         if (!$this->isRealJasminServer()) {
             $listStr = <<<STR
@@ -215,10 +190,8 @@ STR;
 
     /**
      * @depends testIsEnabledUser
-     *
-     * @throws \JasminWeb\Exception\ConnectorException
      */
-    public function testRemoveUser()
+    public function testRemoveUser(): void
     {
         if (!$this->isRealJasminServer()) {
             $this->session->method('runCommand')->willReturn('Successfully removed');
