@@ -193,6 +193,7 @@ STR;
     public function removeFilter(string $key): void
     {
         if (!$this->isRealJasminServer()) {
+            $this->setUp();
             $this->session->method('runCommand')->willReturn('Successfully');
         }
 
