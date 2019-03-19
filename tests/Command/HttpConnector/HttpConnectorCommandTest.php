@@ -70,8 +70,6 @@ STR;
 
     /**
      * @depends testNotEmptyListWithFakeData
-     *
-     * @throws \JasminWeb\Exception\ConnectorException
      */
     public function testAddConnector(): void
     {
@@ -88,7 +86,6 @@ STR;
         ];
 
         $this->assertTrue($this->connector->add($data, $errstr), $errstr);
-        $this->session->persist();
     }
 
     /**
@@ -121,8 +118,6 @@ STR;
 
     /**
      * @depends testConnectorsList
-     *
-     * @throws \JasminWeb\Exception\ConnectorException
      */
     public function testRemoveConnector(): void
     {
@@ -131,7 +126,6 @@ STR;
         }
 
         $this->assertTrue($this->connector->remove($this->cid));
-        $this->session->persist();
         $this->testEmptyList();
     }
 }

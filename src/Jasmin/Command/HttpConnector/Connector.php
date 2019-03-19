@@ -58,4 +58,9 @@ class Connector extends BaseCommand
     {
         return true;
     }
+
+    protected function isNeedPersist(): bool
+    {
+        return true;
+    }
 }
