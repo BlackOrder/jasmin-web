@@ -35,8 +35,8 @@ class Connector extends BaseObject
         foreach ($exploded as $expl) {
             $user = trim($expl);
 
-            //fetch string before the "Total Users:" phrase. This has the last user that was parsed from jcli
-            $ff = strstr($expl, 'Total Users:', true);
+            //fetch string before the "Total connectors:" phrase. This has the last user that was parsed from jcli
+            $ff = strstr($expl, 'Total connectors:', true);
             if (!empty($ff)) {
                 $user = trim($ff);
             }
