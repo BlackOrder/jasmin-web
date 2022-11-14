@@ -6,41 +6,38 @@ use JasminWeb\Jasmin\Command\AddValidator;
 use JasminWeb\Jasmin\Command\BaseCommand;
 use JasminWeb\Jasmin\Command\ChangeStateTrait;
 
-class Group extends BaseCommand
-{
-    use ChangeStateTrait;
+class Group extends BaseCommand {
+  use ChangeStateTrait;
 
-    protected function getName(): string
-    {
-        return 'group';
+  protected function getName(): string {
+    return 'group';
+  }
+
+  /**
+   * @param array $exploded
+   * @return array
+   */
+  protected function parseList(array $exploded): array
+  {
+    $groups = [];
+    foreach ($exploded as $item) {
+      $group = trim($item);
+
+      $ff = strstr($item, 'Total Groups:', true);
+      if (!empty($ff)) {
+        $group = trim($ff);
+      }
+
+      $groups[] = (object) ['gid' => $group];
     }
 
-    /**
-     * @param array $exploded
-     * @return array
-     */
-    protected function parseList(array $exploded): array
-    {
-        $groups = [];
-        foreach ($exploded as $item) {
-            $group = trim($item);
+    return $groups;
+  }
 
-            $ff = strstr($item, 'Total Groups:', true);
-            if (!empty($ff)) {
-                $group = trim($ff);
-            }
-
-            $groups[] = (object) [ 'gid' => $group ];
-        }
-
-        return $groups;
-    }
-
-    /**
-     * @return AddValidator
-     */
-    protected function getAddValidator(): AddValidator
-    {
-        return new GroupAddValidator();
-    }
+  /**
+   * @return AddValidator
+   */
+  protected function getAddValidator(): AddValidator {
+    return new GroupAddValidator();
+  }
 }
