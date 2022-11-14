@@ -57,14 +57,14 @@ class MtRouter extends BaseObject
         foreach ($exploded as $expl) {
             $router = trim($expl);
 
-            //fetch string before the "Total Groups:" lectic
-            $ff = strstr($expl, 'Total MO Routes:', true);
+            //fetch string before the "Total MT Routes:" lectic
+            $ff = strstr($expl, 'Total MT Routes:', true);
             if (!empty($ff)) {
                 $router = trim($ff);
             }
             
             //Get the filters
-            preg_match('~<(.*?)>~', $router, $MTfilters);
+            preg_match_all('~<(.*?)>~', $router, $MTfilters);
             
             //Fix and clean blank spaces
             $temp_MT = explode(" ", $router);
@@ -75,10 +75,10 @@ class MtRouter extends BaseObject
             }
             
             $routers[] = [
-                'order'     => $router[0],
-                'type'      => $router[1],
-                'rate'      => intval($router[2]),
-                'connector' => $router[3],
+                'order'     => $fixed_MT[0],
+                'type'      => $fixed_MT[1],
+                'rate'      => intval($fixed_MT[2]),
+                'connector' => $fixed_MT[3],
                 'filters'   => $MTfilters[1],
             ];
         }

@@ -61,16 +61,28 @@ class MoRouter extends BaseObject
         foreach ($exploded as $expl) {
             $router = trim($expl);
 
-            //fetch string before the "Total Groups:" lectic
+            //fetch string before the "Total MO Routes:" lectic
             $ff = strstr($expl, 'Total MO Routes:', true);
             if (!empty($ff)) {
                 $router = trim($ff);
             }
+            
+            //Get the filters
+            preg_match_all('~<(.*?)>~', $router, $MOfilters);
+            
+            //Fix and clean blank spaces
+            $temp_MO = explode(" ", $router);
+            $temp_MO = array_filter($temp_MO);
+            $fixed_MO = array();
+            foreach ($temp_MO as $temp){
+                array_push($fixed_MO, $temp);
+            }
+
             $routers[] = [
-                'order'     => $router[0],
-                'type'      => $router[1],
-                'connector' => $router[2],
-                'filters'   => $router[3],
+                'order'     => $fixed_MO[0],
+                'type'      => $fixed_MO[1],
+                'connector' => $fixed_MO[2],
+                'filters'   => $MOfilters[1],
             ];
         }
 
