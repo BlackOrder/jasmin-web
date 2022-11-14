@@ -43,12 +43,12 @@ class Connector extends BaseCommand
                 $fixed_row[] = $temp;
             }
 
-            $connector['cid'] = $fixed_row[0];
-            $connector['type'] = $fixed_row[1];
-            $connector['method'] = $fixed_row[2];
-            $connector['url'] = $fixed_row[3];
-
-            $connectors[] = $connector;
+            $connectors[] = (object) [
+                'cid' => $fixed_row[0],
+                'type' => $fixed_row[1],
+                'method' => $fixed_row[2],
+                'url' => $fixed_row[3],
+            ];
         }
 
         return $connectors;
