@@ -46,13 +46,13 @@ class Connector extends BaseCommand
                 $fixed_row[] = $temp;
             }
 
-            $connector['cid'] = $fixed_row[0];
-            $connector['service'] = $fixed_row[1];
-            $connector['session'] = $fixed_row[2];
-            $connector['starts'] = (int) ($fixed_row[3] ?? 0);
-            $connector['stops'] = (int) ($fixed_row[4] ?? 0);
-
-            $connectors[] = $connector;
+      $connectors[] = (object) [
+        'cid' => $fixed_row[0],
+        'service' => $fixed_row[1],
+        'session' => $fixed_row[2],
+        'starts' => (int) ($fixed_row[3] ?? 0),
+        'stops' => (int) ($fixed_row[4] ?? 0),
+      ];
         }
 
         return $connectors;
