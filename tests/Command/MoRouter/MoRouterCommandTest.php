@@ -7,39 +7,35 @@ use JasminWeb\Jasmin\Command\HttpConnector\Connector;
 use JasminWeb\Jasmin\Command\MoRouter\MoRouter;
 use JasminWeb\Test\Command\BaseCommandTest;
 
-class MoRouterCommandTest extends BaseCommandTest
-{
-    /**
-     * @var MoRouter
-     */
-    private $router;
+class MoRouterCommandTest extends BaseCommandTest {
+  /**
+   * @var MoRouter
+   */
+  private $router;
 
-    protected function initCommand(): void
-    {
-        $this->router = new MoRouter($this->session);
-    }
+  protected function initCommand(): void {
+    $this->router = new MoRouter($this->session);
+  }
 
-    public function testEmptyList(): void
-    {
-        if (!$this->isRealJasminServer()) {
-            $listStr = <<<STR
+  public function testEmptyList(): void {
+    if (!$this->isRealJasminServer()) {
+      $listStr = <<<STR
 #Order Type                    Connector ID(s)                  Filter(s)
 Total MO Routes: 0
 STR;
-            $this->session->method('runCommand')->willReturn($listStr);
-        }
-
-        $list = $this->router->all();
-        $this->assertEmpty($list);
+      $this->session->method('runCommand')->willReturn($listStr);
     }
 
-    /**
-     * @depends testEmptyList
-     */
-    public function testNotEmptyListWithFakeData(): void
-    {
-        if (!$this->isRealJasminServer()) {
-            $listStr = <<<STR
+    $list = $this->router->all();
+    $this->assertEmpty($list);
+  }
+
+  /**
+   * @depends testEmptyList
+   */
+  public function testNotEmptyListWithFakeData(): void {
+    if (!$this->isRealJasminServer()) {
+      $listStr = <<<STR
 #Order Type                    Connector ID(s)                  Filter(s)
 #30    FailoverMORoute         http(http_4), http(http_5)       <T>, <T>
 #20    RandomRoundrobinMORoute http(http_2), http(http_3)       <T>, <T>
@@ -48,155 +44,150 @@ STR;
 #0     DefaultRoute            http(http_default)
 Total MO Routes: 5
 STR;
-            $this->session->method('runCommand')->willReturn($listStr);
+      $this->session->method('runCommand')->willReturn($listStr);
 
-            $list = $this->router->all();
-            $this->assertCount(5, $list);
-            foreach ($list as $row) {
-                $this->assertArrayHasKey('order', $row);
-                $this->assertInternalType('int', $row['order']);
-                $this->assertArrayHasKey('type', $row);
-                $this->assertInternalType('string', $row['type']);
-                $this->assertArrayHasKey('connectors', $row);
-                $this->assertInternalType('array', $row['connectors']);
-                $this->assertArrayHasKey('filters', $row);
-                $this->assertInternalType('array', $row['filters']);
-            }
-        }
-
-        $this->assertTrue(true);
+      $list = $this->router->all();
+      $this->assertCount(5, $list);
+      foreach ($list as $row) {
+        $this->assertArrayHasKey('order', $row);
+        $this->assertInternalType('int', $row['order']);
+        $this->assertArrayHasKey('type', $row);
+        $this->assertInternalType('string', $row['type']);
+        $this->assertArrayHasKey('connectors', $row);
+        $this->assertInternalType('array', $row['connectors']);
+        $this->assertArrayHasKey('filters', $row);
+        $this->assertInternalType('array', $row['filters']);
+      }
     }
 
-    /**
-     * @depends testNotEmptyListWithFakeData
-     */
-    public function testAddDefaultRoute(): void
-    {
-        if (!$this->isRealJasminServer()) {
-            $this->session->method('runCommand')->willReturn('Successfully added');
-        }
+    $this->assertTrue(true);
+  }
 
-        $errstr = '';
-
-        (new Connector($this->session))->add([
-            'url' => 'http://google.com',
-            'method' => 'GET',
-            'cid' => 'http-01'
-        ]);
-
-        $data = [
-            'type' => 'defaultroute',
-            'connector' => 'http(http-01)',
-            'order' => 0
-        ];
-
-        $this->assertTrue($this->router->add($data, $errstr), $errstr);
+  /**
+   * @depends testNotEmptyListWithFakeData
+   */
+  public function testAddDefaultRoute(): void {
+    if (!$this->isRealJasminServer()) {
+      $this->session->method('runCommand')->willReturn('Successfully added');
     }
 
-    /**
-     * @depends testAddDefaultRoute
-     */
-    public function testRoutersListAfterAddDefaultRoute(): void
-    {
-        if (!$this->isRealJasminServer()) {
-            $listStr = <<<STR
+    $errstr = '';
+
+    (new Connector($this->session))->add([
+      'url' => 'http://google.com',
+      'method' => 'GET',
+      'cid' => 'http-01',
+    ]);
+
+    $data = [
+      'type' => 'defaultroute',
+      'connector' => 'http(http-01)',
+      'order' => 0,
+    ];
+
+    $this->assertTrue($this->router->add($data, $errstr), $errstr);
+  }
+
+  /**
+   * @depends testAddDefaultRoute
+   */
+  public function testRoutersListAfterAddDefaultRoute(): void {
+    if (!$this->isRealJasminServer()) {
+      $listStr = <<<STR
 #Order Type                    Connector ID(s)                  Filter(s)
 #0     DefaultRoute            http(http-01)
 Total MO Routes: 1
 STR;
-            $this->session->method('runCommand')->willReturn($listStr);
-        }
-
-        $list = $this->router->all();
-        $this->assertCount(1, $list);
-        $row = array_shift($list);
-        $this->assertArrayHasKey('order', $row);
-        $this->assertInternalType('int', $row['order']);
-        $this->assertArrayHasKey('type', $row);
-        $this->assertInternalType('string', $row['type']);
-        $this->assertArrayHasKey('connectors', $row);
-        $this->assertInternalType('array', $row['connectors']);
-        $this->assertArrayHasKey('filters', $row);
-        $this->assertInternalType('array', $row['filters']);
-
-        $this->removeRoute(0);
+      $this->session->method('runCommand')->willReturn($listStr);
     }
 
-    /**
-     * @depends testRoutersListAfterAddDefaultRoute
-     *
-     */
-    public function testAddStaticRouter(): void
-    {
-        if (!$this->isRealJasminServer()) {
-            $this->session->method('runCommand')->willReturn('Successfully added');
-        }
+    $list = $this->router->all();
+    $this->assertCount(1, $list);
+    $row = array_shift($list);
+    $this->assertArrayHasKey('order', $row);
+    $this->assertInternalType('int', $row['order']);
+    $this->assertArrayHasKey('type', $row);
+    $this->assertInternalType('string', $row['type']);
+    $this->assertArrayHasKey('connectors', $row);
+    $this->assertInternalType('array', $row['connectors']);
+    $this->assertArrayHasKey('filters', $row);
+    $this->assertInternalType('array', $row['filters']);
 
-        $errstr = '';
+    $this->removeRoute(0);
+  }
 
-        (new Filter($this->session))->add([
-            'type' => 'transparentfilter',
-            'fid' => 'jFilter1',
-        ]);
-
-        (new Connector($this->session))->add([
-            'url' => 'http://google.com',
-            'method' => 'GET',
-            'cid' => 'http-01'
-        ]);
-
-        $data = [
-            'type' => 'staticmoroute',
-            'connector' => 'http(http-01)',
-            'order' => 10,
-            'filters' => ['jFilter1']
-        ];
-
-        $this->assertTrue($this->router->add($data, $errstr), $errstr);
+  /**
+   * @depends testRoutersListAfterAddDefaultRoute
+   *
+   */
+  public function testAddStaticRouter(): void {
+    if (!$this->isRealJasminServer()) {
+      $this->session->method('runCommand')->willReturn('Successfully added');
     }
 
-    /**
-     * @depends testAddStaticRouter
-     */
-    public function testRoutersListAfterAddStaticRoute(): void
-    {
-        if (!$this->isRealJasminServer()) {
-            $listStr = <<<STR
+    $errstr = '';
+
+    (new Filter($this->session))->add([
+      'type' => 'transparentfilter',
+      'fid' => 'jFilter1',
+    ]);
+
+    (new Connector($this->session))->add([
+      'url' => 'http://google.com',
+      'method' => 'GET',
+      'cid' => 'http-01',
+    ]);
+
+    $data = [
+      'type' => 'staticmoroute',
+      'connector' => 'http(http-01)',
+      'order' => 10,
+      'filters' => ['jFilter1'],
+    ];
+
+    $this->assertTrue($this->router->add($data, $errstr), $errstr);
+  }
+
+  /**
+   * @depends testAddStaticRouter
+   */
+  public function testRoutersListAfterAddStaticRoute(): void {
+    if (!$this->isRealJasminServer()) {
+      $listStr = <<<STR
 #Order Type                    Connector ID(s)                  Filter(s)
 #10    StaticMORoute           http(http_1)                     <T>
 Total MO Routes: 1
 STR;
-            $this->session->method('runCommand')->willReturn($listStr);
-        }
-
-        $list = $this->router->all();
-        $this->assertCount(1, $list);
-        $row = array_shift($list);
-        $this->assertArrayHasKey('order', $row);
-        $this->assertInternalType('int', $row['order']);
-        $this->assertArrayHasKey('type', $row);
-        $this->assertInternalType('string', $row['type']);
-        $this->assertArrayHasKey('connectors', $row);
-        $this->assertInternalType('array', $row['connectors']);
-        $this->assertArrayHasKey('filters', $row);
-        $this->assertInternalType('array', $row['filters']);
-
-        $this->removeRoute(10);
-
-        (new Filter($this->session))->remove('jFilter1');
+      $this->session->method('runCommand')->willReturn($listStr);
     }
 
-    /**
-     * @param int $key
-     */
-    public function removeRoute(int $key): void
-    {
-        if (!$this->isRealJasminServer()) {
-            $this->setUp();
-            $this->session->method('runCommand')->willReturn('Successfully');
-        }
+    $list = $this->router->all();
+    $this->assertCount(1, $list);
+    $row = array_shift($list);
+    $this->assertArrayHasKey('order', $row);
+    $this->assertInternalType('int', $row['order']);
+    $this->assertArrayHasKey('type', $row);
+    $this->assertInternalType('string', $row['type']);
+    $this->assertArrayHasKey('connectors', $row);
+    $this->assertInternalType('array', $row['connectors']);
+    $this->assertArrayHasKey('filters', $row);
+    $this->assertInternalType('array', $row['filters']);
 
-        $this->assertTrue($this->router->remove($key));
-        $this->testEmptyList();
+    $this->removeRoute(10);
+
+    (new Filter($this->session))->remove('jFilter1');
+  }
+
+  /**
+   * @param int $key
+   */
+  public function removeRoute(int $key): void {
+    if (!$this->isRealJasminServer()) {
+      $this->setUp();
+      $this->session->method('runCommand')->willReturn('Successfully');
     }
+
+    $this->assertTrue($this->router->remove($key));
+    $this->testEmptyList();
+  }
 }

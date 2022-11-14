@@ -6,200 +6,189 @@ use JasminWeb\Jasmin\Command\Group\Group;
 use JasminWeb\Jasmin\Command\User\User;
 use JasminWeb\Test\Command\BaseCommandTest;
 
-class UserCommandTest extends BaseCommandTest
-{
-    /**
-     * @var User
-     */
-    protected $user;
+class UserCommandTest extends BaseCommandTest {
+  /**
+   * @var User
+   */
+  protected $user;
 
-    /**
-     * @var int
-     */
-    protected $uid = 'jTestU1';
+  /**
+   * @var int
+   */
+  protected $uid = 'jTestU1';
 
-    /**
-     * @var int
-     */
-    protected $gid = 'jTestG1';
+  /**
+   * @var int
+   */
+  protected $gid = 'jTestG1';
 
-    /**
-     * @var string
-     */
-    protected $username = 'jTestUN1';
+  /**
+   * @var string
+   */
+  protected $username = 'jTestUN1';
 
-    /**
-     * @var string
-     */
-    protected $password = 'jTestPD1';
+  /**
+   * @var string
+   */
+  protected $password = 'jTestPD1';
 
-    protected function initCommand(): void
-    {
-        $this->user = new User($this->session);
-    }
+  protected function initCommand(): void {
+    $this->user = new User($this->session);
+  }
 
-    /**
-     */
-    public function testEmptyList(): void
-    {
-        if (!$this->isRealJasminServer()) {
-            $listStr = <<<STR
+  /**
+   */
+  public function testEmptyList(): void {
+    if (!$this->isRealJasminServer()) {
+      $listStr = <<<STR
 #User id          Group id         Username         Balance MT SMS Throughput
 Total Users: 0
 STR;
-            $this->session->method('runCommand')->willReturn($listStr);
-        }
-
-        $list = $this->user->all();
-        $this->assertEmpty($list);
+      $this->session->method('runCommand')->willReturn($listStr);
     }
 
-    public function testAddUserWithoutGroupInDb(): void
-    {
-        if (!$this->isRealJasminServer()) {
-            $str = 'You must set User id (uid), group (gid), username and password before saving !';
-            $this->session->method('runCommand')->willReturn($str);
-        }
+    $list = $this->user->all();
+    $this->assertEmpty($list);
+  }
 
-        $errstr = '';
-        $this->assertFalse($this->user->add([
-            'uid' => $this->uid,
-            'gid' => $this->gid,
-            'username' => $this->username,
-            'password' => $this->password,
-        ], $errstr), $errstr);
+  public function testAddUserWithoutGroupInDb(): void {
+    if (!$this->isRealJasminServer()) {
+      $str = 'You must set User id (uid), group (gid), username and password before saving !';
+      $this->session->method('runCommand')->willReturn($str);
     }
 
-    /**
-     * @depends testAddUserWithoutGroupInDb
-     */
-    public function testAddUserWithGroup(): void
-    {
-        if (!$this->isRealJasminServer()) {
-            $this->session->method('runCommand')->willReturn('Successfully added');
-        }
+    $errstr = '';
+    $this->assertFalse($this->user->add([
+      'uid' => $this->uid,
+      'gid' => $this->gid,
+      'username' => $this->username,
+      'password' => $this->password,
+    ], $errstr), $errstr);
+  }
 
-        (new Group($this->session))->add(['gid' => $this->gid]);
-        $errstr = '';
-        $this->assertTrue($this->user->add([
-            'uid' => $this->uid,
-            'gid' => $this->gid,
-            'username' => $this->username,
-            'password' => $this->password,
-        ], $errstr), $errstr);
-        $this->assertTrue(true);
+  /**
+   * @depends testAddUserWithoutGroupInDb
+   */
+  public function testAddUserWithGroup(): void {
+    if (!$this->isRealJasminServer()) {
+      $this->session->method('runCommand')->willReturn('Successfully added');
     }
 
-    /**
-     * @depends testAddUserWithGroup
-     */
-    public function testUserList(): void
-    {
-        if (!$this->isRealJasminServer()) {
-            $listStr = <<<STR
+    (new Group($this->session))->add(['gid' => $this->gid]);
+    $errstr = '';
+    $this->assertTrue($this->user->add([
+      'uid' => $this->uid,
+      'gid' => $this->gid,
+      'username' => $this->username,
+      'password' => $this->password,
+    ], $errstr), $errstr);
+    $this->assertTrue(true);
+  }
+
+  /**
+   * @depends testAddUserWithGroup
+   */
+  public function testUserList(): void {
+    if (!$this->isRealJasminServer()) {
+      $listStr = <<<STR
 #User id          Group id         Username         Balance MT SMS Throughput
 #$this->uid              $this->gid                $this->username              ND (!)  ND (!) ND/ND
 Total Users: 1
 STR;
 
-            $this->session->method('runCommand')->willReturn($listStr);
-        }
-
-        $list = $this->user->all();
-        $this->assertCount(1, $list);
-
-        $row = array_shift($list);
-
-        $this->assertArrayHasKey('uid', $row);
-        $this->assertArrayHasKey('gid', $row);
-        $this->assertArrayHasKey('username', $row);
-        $this->assertArrayHasKey('balance', $row);
-        $this->assertArrayHasKey('mt', $row);
-        $this->assertArrayHasKey('sms', $row);
-        $this->assertArrayHasKey('throughput', $row);
-
-        $this->assertEquals($this->gid, $row['gid']);
-        $this->assertEquals($this->uid, $row['uid']);
-        $this->assertEquals($this->username, $row['username']);
+      $this->session->method('runCommand')->willReturn($listStr);
     }
 
-    /**
-     * @depends testUserList
-     */
-    public function testDisableUser(): void
-    {
-        if (!$this->isRealJasminServer()) {
-            $this->session->method('runCommand')->willReturn('Successfully disabled');
-        }
+    $list = $this->user->all();
+    $this->assertCount(1, $list);
 
-        $user = $this->user;
-        $this->assertTrue($user->disable($this->uid));
+    $row = array_shift($list);
+
+    $this->assertArrayHasKey('uid', $row);
+    $this->assertArrayHasKey('gid', $row);
+    $this->assertArrayHasKey('username', $row);
+    $this->assertArrayHasKey('balance', $row);
+    $this->assertArrayHasKey('mt', $row);
+    $this->assertArrayHasKey('sms', $row);
+    $this->assertArrayHasKey('throughput', $row);
+
+    $this->assertEquals($this->gid, $row['gid']);
+    $this->assertEquals($this->uid, $row['uid']);
+    $this->assertEquals($this->username, $row['username']);
+  }
+
+  /**
+   * @depends testUserList
+   */
+  public function testDisableUser(): void {
+    if (!$this->isRealJasminServer()) {
+      $this->session->method('runCommand')->willReturn('Successfully disabled');
     }
 
-    /**
-     * @depends testDisableUser
-     *
-     */
-    public function testIsDisabledUser(): void
-    {
-        if (!$this->isRealJasminServer()) {
-            $listStr = <<<STR
+    $user = $this->user;
+    $this->assertTrue($user->disable($this->uid));
+  }
+
+  /**
+   * @depends testDisableUser
+   *
+   */
+  public function testIsDisabledUser(): void {
+    if (!$this->isRealJasminServer()) {
+      $listStr = <<<STR
 #User id          Group id         Username         Balance MT SMS Throughput
 #!$this->uid              $this->gid                $this->username              ND (!)  ND (!) ND/ND
 Total Users: 1
 STR;
 
-            $this->session->method('runCommand')->willReturn($listStr);
-        }
-
-        $users = $this->user->all();
-        $this->assertStringContainsString('!', $users[0]['uid']);
+      $this->session->method('runCommand')->willReturn($listStr);
     }
 
-    /**
-     * @depends testIsDisabledUser
-     */
-    public function testEnableUser(): void
-    {
-        if (!$this->isRealJasminServer()) {
-            $this->session->method('runCommand')->willReturn('Successfully enabled');
-        }
+    $users = $this->user->all();
+    $this->assertStringContainsString('!', $users[0]['uid']);
+  }
 
-        $this->assertTrue($this->user->enable($this->uid));
+  /**
+   * @depends testIsDisabledUser
+   */
+  public function testEnableUser(): void {
+    if (!$this->isRealJasminServer()) {
+      $this->session->method('runCommand')->willReturn('Successfully enabled');
     }
 
-    /**
-     * @depends testEnableUser
-     *
-     */
-    public function testIsEnabledUser(): void
-    {
-        if (!$this->isRealJasminServer()) {
-            $listStr = <<<STR
+    $this->assertTrue($this->user->enable($this->uid));
+  }
+
+  /**
+   * @depends testEnableUser
+   *
+   */
+  public function testIsEnabledUser(): void {
+    if (!$this->isRealJasminServer()) {
+      $listStr = <<<STR
 #User id          Group id         Username         Balance MT SMS Throughput
 #$this->uid              $this->gid                $this->username              ND (!)  ND (!) ND/ND
 Total Users: 1
 STR;
 
-            $this->session->method('runCommand')->willReturn($listStr);
-        }
-
-        $users = $this->user->all();
-        $this->assertStringNotContainsString('!', $users[0]['uid']);
+      $this->session->method('runCommand')->willReturn($listStr);
     }
 
-    /**
-     * @depends testIsEnabledUser
-     */
-    public function testRemoveUser(): void
-    {
-        if (!$this->isRealJasminServer()) {
-            $this->session->method('runCommand')->willReturn('Successfully removed');
-        }
+    $users = $this->user->all();
+    $this->assertStringNotContainsString('!', $users[0]['uid']);
+  }
 
-        $this->assertTrue($this->user->remove($this->uid));
-        (new Group($this->session))->remove($this->gid);
-
-        $this->testEmptyList();
+  /**
+   * @depends testIsEnabledUser
+   */
+  public function testRemoveUser(): void {
+    if (!$this->isRealJasminServer()) {
+      $this->session->method('runCommand')->willReturn('Successfully removed');
     }
+
+    $this->assertTrue($this->user->remove($this->uid));
+    (new Group($this->session))->remove($this->gid);
+
+    $this->testEmptyList();
+  }
 }

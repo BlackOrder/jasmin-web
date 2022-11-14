@@ -6,9 +6,6 @@
 
 namespace JasminWeb\Jasmin\Filter;
 
-use JasminWeb\Jasmin\TelnetConnector;
-
-class ShortMessageFilter extends Filter
-{
+class ShortMessageFilter extends Filter {
 
 }

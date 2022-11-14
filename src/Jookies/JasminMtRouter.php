@@ -6,19 +6,16 @@ namespace Jookies;
  *
  * id property is the order for that class
  */
-class JasminMtRouter extends JasminObject
-{
-    var $command = 'mtrouter';
-    var $properties;
+class JasminMtRouter extends JasminObject {
+  var $command = 'mtrouter';
+  var $properties;
 
-    public function __construct()
-    {
-        parent::__construct();
-    }
+  public function __construct() {
+    parent::__construct();
+  }
 
-    public function set_id($id)
-    {
-        $this->id = $id;
-        $this->properties['order'] =$id;
-    }
+  public function set_id($id) {
+    $this->id = $id;
+    $this->properties['order'] = $id;
+  }
 }

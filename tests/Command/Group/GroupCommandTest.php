@@ -5,149 +5,139 @@ namespace JasminWeb\Test\Command\Group;
 use JasminWeb\Jasmin\Command\Group\Group;
 use JasminWeb\Test\Command\BaseCommandTest;
 
-class GroupCommandTest extends BaseCommandTest
-{
-    /**
-     * @var Group
-     */
-    protected $group;
+class GroupCommandTest extends BaseCommandTest {
+  /**
+   * @var Group
+   */
+  protected $group;
 
-    /**
-     * @var string
-     */
-    protected $gid = 'jTestG1';
+  /**
+   * @var string
+   */
+  protected $gid = 'jTestG1';
 
-    protected function initCommand(): void
-    {
-        $this->group = new Group($this->session);
-    }
+  protected function initCommand(): void {
+    $this->group = new Group($this->session);
+  }
 
-    public function testEmptyList(): void
-    {
-        if (!$this->isRealJasminServer()) {
-            $listStr = <<<STR
+  public function testEmptyList(): void {
+    if (!$this->isRealJasminServer()) {
+      $listStr = <<<STR
 #Group id
 Total Groups: 0
 STR;
-            $this->session->method('runCommand')->willReturn($listStr);
-        }
-
-        $this->assertEmpty($this->group->all());
+      $this->session->method('runCommand')->willReturn($listStr);
     }
 
-    /**
-     * @depends testEmptyList
-     */
-    public function testAddGroup(): void
-    {
-        if (!$this->isRealJasminServer()) {
-            $this->session->method('runCommand')->willReturn('Successfully added');
-        }
+    $this->assertEmpty($this->group->all());
+  }
 
-        $errorStr = '';
-        $this->assertTrue($this->group->add(['gid' => $this->gid], $errorStr), $errorStr);
+  /**
+   * @depends testEmptyList
+   */
+  public function testAddGroup(): void {
+    if (!$this->isRealJasminServer()) {
+      $this->session->method('runCommand')->willReturn('Successfully added');
     }
 
-    /**
-     * @depends testAddGroup
-     */
-    public function testListAfterAdd(): void
-    {
-        if (!$this->isRealJasminServer()) {
-            $listStr = <<<STR
+    $errorStr = '';
+    $this->assertTrue($this->group->add(['gid' => $this->gid], $errorStr), $errorStr);
+  }
+
+  /**
+   * @depends testAddGroup
+   */
+  public function testListAfterAdd(): void {
+    if (!$this->isRealJasminServer()) {
+      $listStr = <<<STR
 #Group id
 #$this->gid
 Total Groups: 1
 STR;
-            $this->session->method('runCommand')->willReturn($listStr);
-        }
-
-        $list = $this->group->all();
-        $this->assertCount(1, $list);
-        $row = array_shift($list);
-        $this->assertArrayHasKey('gid', $row);
-        $this->assertEquals($this->gid, $row['gid']);
+      $this->session->method('runCommand')->willReturn($listStr);
     }
 
-    /**
-     * @depends testListAfterAdd
-     */
-    public function testDisableGroup(): void
-    {
-        if (!$this->isRealJasminServer()) {
-            $this->session->method('runCommand')->willReturn('Successfully disabled');
-        }
+    $list = $this->group->all();
+    $this->assertCount(1, $list);
+    $row = array_shift($list);
+    $this->assertArrayHasKey('gid', $row);
+    $this->assertEquals($this->gid, $row['gid']);
+  }
 
-        $this->assertTrue($this->group->disable($this->gid));
+  /**
+   * @depends testListAfterAdd
+   */
+  public function testDisableGroup(): void {
+    if (!$this->isRealJasminServer()) {
+      $this->session->method('runCommand')->willReturn('Successfully disabled');
     }
 
-    /**
-     * @depends testDisableGroup
-     *
-     * @throws \JasminWeb\Exception\ConnectorException
-     */
-    public function testIsDisabledGroup(): void
-    {
-        if (!$this->isRealJasminServer()) {
-            $listStr = <<<STR
+    $this->assertTrue($this->group->disable($this->gid));
+  }
+
+  /**
+   * @depends testDisableGroup
+   *
+   * @throws \JasminWeb\Exception\ConnectorException
+   */
+  public function testIsDisabledGroup(): void {
+    if (!$this->isRealJasminServer()) {
+      $listStr = <<<STR
 #Group id
 #!$this->gid
 Total Groups: 1
 STR;
 
-            $this->session->method('runCommand')->willReturn($listStr);
-        }
-
-        $groups = $this->group->all();
-        $this->assertStringContainsString('!', $groups[0]['gid']);
+      $this->session->method('runCommand')->willReturn($listStr);
     }
 
-    /**
-     * @depends testIsDisabledGroup
-     */
-    public function testEnableGroup(): void
-    {
-        if (!$this->isRealJasminServer()) {
-            $this->session->method('runCommand')->willReturn('Successfully enabled');
-        }
+    $groups = $this->group->all();
+    $this->assertStringContainsString('!', $groups[0]['gid']);
+  }
 
-        $this->assertTrue($this->group->enable($this->gid));
+  /**
+   * @depends testIsDisabledGroup
+   */
+  public function testEnableGroup(): void {
+    if (!$this->isRealJasminServer()) {
+      $this->session->method('runCommand')->willReturn('Successfully enabled');
     }
 
-    /**
-     * @depends testEnableGroup
-     *
-     * @throws \JasminWeb\Exception\ConnectorException
-     */
-    public function testIsEnabledGroup(): void
-    {
-        if (!$this->isRealJasminServer()) {
-            $listStr = <<<STR
+    $this->assertTrue($this->group->enable($this->gid));
+  }
+
+  /**
+   * @depends testEnableGroup
+   *
+   * @throws \JasminWeb\Exception\ConnectorException
+   */
+  public function testIsEnabledGroup(): void {
+    if (!$this->isRealJasminServer()) {
+      $listStr = <<<STR
 #Group id
 #$this->gid
 Total Groups: 1
 STR;
 
-            $this->session->method('runCommand')->willReturn($listStr);
-        }
-
-        $groups = $this->group->all();
-        $this->assertStringNotContainsString('!', $groups[0]['gid']);
+      $this->session->method('runCommand')->willReturn($listStr);
     }
 
-    /**
-     * @depends testIsEnabledGroup
-     *
-     * @throws \JasminWeb\Exception\ConnectorException
-     */
-    public function testRemoveGroup(): void
-    {
-        if (!$this->isRealJasminServer()) {
-            $this->session->method('runCommand')->willReturn('Successfully removed');
-        }
+    $groups = $this->group->all();
+    $this->assertStringNotContainsString('!', $groups[0]['gid']);
+  }
 
-        $this->assertTrue($this->group->remove($this->gid));
-
-        $this->testEmptyList();
+  /**
+   * @depends testIsEnabledGroup
+   *
+   * @throws \JasminWeb\Exception\ConnectorException
+   */
+  public function testRemoveGroup(): void {
+    if (!$this->isRealJasminServer()) {
+      $this->session->method('runCommand')->willReturn('Successfully removed');
     }
+
+    $this->assertTrue($this->group->remove($this->gid));
+
+    $this->testEmptyList();
+  }
 }

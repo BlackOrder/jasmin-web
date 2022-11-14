@@ -6,8 +6,6 @@
 
 namespace JasminWeb\Jasmin\MtRouter;
 
-
-class RandomRoundrobinMTRoute extends MtRouter
-{
+class RandomRoundrobinMTRoute extends MtRouter {
 
 }

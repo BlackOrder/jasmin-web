@@ -6,9 +6,6 @@
 
 namespace JasminWeb\Jasmin\Filter;
 
-use JasminWeb\Jasmin\TelnetConnector;
-
-class EvalPyFilter extends Filter
-{
+class EvalPyFilter extends Filter {
 
 }

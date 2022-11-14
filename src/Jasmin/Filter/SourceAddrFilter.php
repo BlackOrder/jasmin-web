@@ -6,9 +6,6 @@
 
 namespace JasminWeb\Jasmin\Filter;
 
-use JasminWeb\Jasmin\TelnetConnector;
-
-class SourceAddrFilter extends Filter
-{
+class SourceAddrFilter extends Filter {
 
 }

@@ -6,8 +6,6 @@
 
 namespace JasminWeb\Jasmin\MoRouter;
 
-
-class RandomRoundrobinMORoute extends MoRouter
-{
+class RandomRoundrobinMORoute extends MoRouter {
 
 }

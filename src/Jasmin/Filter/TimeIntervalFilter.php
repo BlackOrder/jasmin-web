@@ -6,9 +6,6 @@
 
 namespace JasminWeb\Jasmin\Filter;
 
-use JasminWeb\Jasmin\TelnetConnector;
-
-class TimeIntervalFilter extends Filter
-{
+class TimeIntervalFilter extends Filter {
 
 }

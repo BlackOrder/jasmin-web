@@ -8,40 +8,36 @@ use JasminWeb\Jasmin\Command\SmppConnector\Connector;
 use JasminWeb\Jasmin\Command\User\User;
 use JasminWeb\Test\Command\BaseCommandTest;
 
-class FilterCommandTest extends BaseCommandTest
-{
-    /**
-     * @var Filter
-     */
-    private $filter;
+class FilterCommandTest extends BaseCommandTest {
+  /**
+   * @var Filter
+   */
+  private $filter;
 
-    protected function initCommand(): void
-    {
-        $this->filter = new Filter($this->session);
-    }
+  protected function initCommand(): void {
+    $this->filter = new Filter($this->session);
+  }
 
-    public function testEmptyList(): void
-    {
-        if (!$this->isRealJasminServer()) {
-            $listStr = <<<STR
+  public function testEmptyList(): void {
+    if (!$this->isRealJasminServer()) {
+      $listStr = <<<STR
 #Filter id        Type                   Routes Description
 Total Filters: 0
 STR;
-            $this->session->method('runCommand')->willReturn($listStr);
-        }
-
-        $list = $this->filter->all();
-
-        $this->assertEmpty($list, json_encode($list));
+      $this->session->method('runCommand')->willReturn($listStr);
     }
 
-    /**
-     * @depends testEmptyList
-     */
-    public function testFakeNonEmptyList(): void
-    {
-        if (!$this->isRealJasminServer()) {
-            $listStr = <<<STR
+    $list = $this->filter->all();
+
+    $this->assertEmpty($list, json_encode($list));
+  }
+
+  /**
+   * @depends testEmptyList
+   */
+  public function testFakeNonEmptyList(): void {
+    if (!$this->isRealJasminServer()) {
+      $listStr = <<<STR
 #Filter id        Type                   Routes Description
 #StartWithHello   ShortMessageFilter     MO MT  <ShortMessageFilter (msg=^hello.*$)>
 #ExternalPy       EvalPyFilter           MO MT  <EvalPyFilter (pyCode= ..)>
@@ -55,149 +51,144 @@ STR;
 #f_3              UserFilter             MT     <U (uid=u_1)>
 Total Filters: 10
 STR;
-            $this->session->method('runCommand')->willReturn($listStr);
-            $list = $this->filter->all();
-            $this->assertCount(10, $list);
-            foreach ($list as $row) {
-                $this->assertArrayHasKey('fid', $row);
-                $this->assertInternalType('string', $row['fid']);
-                $this->assertArrayHasKey('type', $row);
-                $this->assertContains($row['type'], [
-                    'ShortMessageFilter',
-                    'EvalPyFilter',
-                    'DestinationAddrFilter',
-                    'DateIntervalFilter',
-                    'TimeIntervalFilter',
-                    'TransparentFilter',
-                    'TagFilter',
-                    'ConnectorFilter',
-                    'UserFilter',
-                    'SourceAddrFilter',
-                ]);
-                $this->assertArrayHasKey('routes', $row);
-                $this->assertInternalType('array', $row['routes']);
-                $this->assertArrayHasKey('description', $row);
-                $this->assertInternalType('string', $row['description']);
-            }
-        }
-
-        $this->assertTrue(true);
+      $this->session->method('runCommand')->willReturn($listStr);
+      $list = $this->filter->all();
+      $this->assertCount(10, $list);
+      foreach ($list as $row) {
+        $this->assertArrayHasKey('fid', $row);
+        $this->assertInternalType('string', $row['fid']);
+        $this->assertArrayHasKey('type', $row);
+        $this->assertContains($row['type'], [
+          'ShortMessageFilter',
+          'EvalPyFilter',
+          'DestinationAddrFilter',
+          'DateIntervalFilter',
+          'TimeIntervalFilter',
+          'TransparentFilter',
+          'TagFilter',
+          'ConnectorFilter',
+          'UserFilter',
+          'SourceAddrFilter',
+        ]);
+        $this->assertArrayHasKey('routes', $row);
+        $this->assertInternalType('array', $row['routes']);
+        $this->assertArrayHasKey('description', $row);
+        $this->assertInternalType('string', $row['description']);
+      }
     }
 
-    /**
-     * @depends testFakeNonEmptyList
-     */
-    public function testAddUserFilter(): void
-    {
-        if (!$this->isRealJasminServer()) {
-            $this->session->method('runCommand')->willReturn('Successfully added');
-        }
+    $this->assertTrue(true);
+  }
 
-        (new Group($this->session))->add([
-            'gid' => 'jTestG1',
-        ]);
-
-        (new User($this->session))->add([
-            'uid' => 'jTestU1',
-            'gid' => 'jTestG1',
-            'username' => 'jTestUN1',
-            'password' => 'jTestP1'
-        ]);
-
-        $errstr = '';
-        $this->assertTrue($this->filter->add([
-            'type' => 'userfilter',
-            'fid' => 'jTestF1',
-            'uid' => 'jTestU1'
-        ], $errstr), $errstr);
+  /**
+   * @depends testFakeNonEmptyList
+   */
+  public function testAddUserFilter(): void {
+    if (!$this->isRealJasminServer()) {
+      $this->session->method('runCommand')->willReturn('Successfully added');
     }
 
-    /**
-     * @depends testAddUserFilter
-     */
-    public function testListAfterAddUserFilter(): void
-    {
-        if (!$this->isRealJasminServer()) {
-            $listStr = <<<STR
+    (new Group($this->session))->add([
+      'gid' => 'jTestG1',
+    ]);
+
+    (new User($this->session))->add([
+      'uid' => 'jTestU1',
+      'gid' => 'jTestG1',
+      'username' => 'jTestUN1',
+      'password' => 'jTestP1',
+    ]);
+
+    $errstr = '';
+    $this->assertTrue($this->filter->add([
+      'type' => 'userfilter',
+      'fid' => 'jTestF1',
+      'uid' => 'jTestU1',
+    ], $errstr), $errstr);
+  }
+
+  /**
+   * @depends testAddUserFilter
+   */
+  public function testListAfterAddUserFilter(): void {
+    if (!$this->isRealJasminServer()) {
+      $listStr = <<<STR
 #Filter id        Type                   Routes Description
 #jTestF1              UserFilter             MT     <U (uid=JTestU1)>
 Total Filters: 1
 STR;
 
-            $this->session->method('runCommand')->willReturn($listStr);
-        }
-
-        $list = $this->filter->all();
-        $this->assertCount(1, $list);
-
-        $row = array_shift($list);
-        $this->assertEquals('jTestF1', $row['fid']);
-        $this->assertEquals('UserFilter', $row['type']);
-
-        $this->removeFilter('jTestF1');
-
-        $this->assertTrue((new Group($this->session))->remove('jTestG1'));
+      $this->session->method('runCommand')->willReturn($listStr);
     }
 
-    /**
-     * @depends testListAfterAddUserFilter
-     */
-    public function testAddConnectorFilter(): void
-    {
-        if (!$this->isRealJasminServer()) {
-            $this->session->method('runCommand')->willReturn('Successfully added');
-        }
+    $list = $this->filter->all();
+    $this->assertCount(1, $list);
 
-        $this->assertTrue((new Connector($this->session))->add([
-            'cid' => 'jTestC1',
-        ]));
+    $row = array_shift($list);
+    $this->assertEquals('jTestF1', $row['fid']);
+    $this->assertEquals('UserFilter', $row['type']);
 
-        $errstr = '';
-        $this->assertTrue($this->filter->add([
-            'type' => Filter::CONNECTOR,
-            'cid' => 'jTestC1',
-            'fid' => 'jTestF1'
-        ], $errstr), $errstr);
+    $this->removeFilter('jTestF1');
+
+    $this->assertTrue((new Group($this->session))->remove('jTestG1'));
+  }
+
+  /**
+   * @depends testListAfterAddUserFilter
+   */
+  public function testAddConnectorFilter(): void {
+    if (!$this->isRealJasminServer()) {
+      $this->session->method('runCommand')->willReturn('Successfully added');
     }
 
-    /**
-     * @depends testAddConnectorFilter
-     */
-    public function testListAfterAddConnectorFilter(): void
-    {
-        if (!$this->isRealJasminServer()) {
-            $listStr = <<<STR
+    $this->assertTrue((new Connector($this->session))->add([
+      'cid' => 'jTestC1',
+    ]));
+
+    $errstr = '';
+    $this->assertTrue($this->filter->add([
+      'type' => Filter::CONNECTOR,
+      'cid' => 'jTestC1',
+      'fid' => 'jTestF1',
+    ], $errstr), $errstr);
+  }
+
+  /**
+   * @depends testAddConnectorFilter
+   */
+  public function testListAfterAddConnectorFilter(): void {
+    if (!$this->isRealJasminServer()) {
+      $listStr = <<<STR
 #Filter id        Type                   Routes Description
 #jTestF1              ConnectorFilter             MT     <C (cid=JTestC1)>
 Total Filters: 1
 STR;
 
-            $this->session->method('runCommand')->willReturn($listStr);
-        }
-
-        $list = $this->filter->all();
-        $this->assertCount(1, $list);
-
-        $row = array_shift($list);
-        $this->assertEquals('jTestF1', $row['fid']);
-        $this->assertEquals('ConnectorFilter', $row['type']);
-
-        $this->removeFilter('jTestF1');
-
-        $this->assertTrue((new Connector($this->session))->remove('jTestC1'));
+      $this->session->method('runCommand')->willReturn($listStr);
     }
 
-    /**
-     * @param string $key
-     */
-    public function removeFilter(string $key): void
-    {
-        if (!$this->isRealJasminServer()) {
-            $this->setUp();
-            $this->session->method('runCommand')->willReturn('Successfully');
-        }
+    $list = $this->filter->all();
+    $this->assertCount(1, $list);
 
-        $this->assertTrue($this->filter->remove($key));
-        $this->testEmptyList();
+    $row = array_shift($list);
+    $this->assertEquals('jTestF1', $row['fid']);
+    $this->assertEquals('ConnectorFilter', $row['type']);
+
+    $this->removeFilter('jTestF1');
+
+    $this->assertTrue((new Connector($this->session))->remove('jTestC1'));
+  }
+
+  /**
+   * @param string $key
+   */
+  public function removeFilter(string $key): void {
+    if (!$this->isRealJasminServer()) {
+      $this->setUp();
+      $this->session->method('runCommand')->willReturn('Successfully');
     }
+
+    $this->assertTrue($this->filter->remove($key));
+    $this->testEmptyList();
+  }
 }
