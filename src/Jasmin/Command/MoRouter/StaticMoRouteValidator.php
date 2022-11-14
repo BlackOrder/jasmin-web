@@ -10,6 +10,6 @@ class StaticMoRouteValidator extends AddValidator {
    */
   public function getRequiredAttributes(): array
   {
-    return ['filters', 'connector'];
+    return ['filters', 'connector', 'order'];
   }
 }

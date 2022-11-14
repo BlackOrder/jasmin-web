@@ -11,7 +11,7 @@ class MtRouterBaseValidator extends InternalAddValidator {
    */
   public function getRequiredAttributes(): array
   {
-    return ['type', 'order', 'rate'];
+    return ['type', 'rate'];
   }
 
   /**

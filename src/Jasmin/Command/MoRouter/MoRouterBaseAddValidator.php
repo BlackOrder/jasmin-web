@@ -11,7 +11,7 @@ class MoRouterBaseAddValidator extends InternalAddValidator {
    */
   public function getRequiredAttributes(): array
   {
-    return ['type', 'order'];
+    return ['type'];
   }
 
   protected function resolveValidator(array $data): ?AddValidator {

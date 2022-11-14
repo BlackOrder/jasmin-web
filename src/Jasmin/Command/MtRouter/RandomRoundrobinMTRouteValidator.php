@@ -10,6 +10,6 @@ class RandomRoundrobinMTRouteValidator extends AddValidator {
    */
   public function getRequiredAttributes(): array
   {
-    return ['filters', 'connectors'];
+    return ['filters', 'connectors', 'order'];
   }
 }
