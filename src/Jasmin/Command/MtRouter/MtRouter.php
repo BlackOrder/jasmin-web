@@ -39,9 +39,10 @@ class MtRouter extends BaseCommand
             }
 
             $router = preg_replace(['/\s{2,}/', '/(<\w)(\s)?/'], [' ','$1'], $router);
+            
             $fixed_routers = explode(' ', $router);
 
-            $row = [
+            $row = (object) [
                 'order'     => (int)array_shift($fixed_routers),
                 'type'      => array_shift($fixed_routers),
                 'rate'      => (float)array_shift($fixed_routers),
@@ -49,20 +50,13 @@ class MtRouter extends BaseCommand
                 'filters' => []
             ];
 
-            if (false !== strpos($el = current($fixed_routers), '(!)')) {
-                array_shift($fixed_routers);
-            }
+            //Get all connectors
+            preg_match_all('~smppc\((.*?)\)~', $router, $MTconnectors);
+            $row->connectors = $MTconnectors[0];
 
-            foreach ($fixed_routers as $temp) {
-                $temp = str_replace(',', '', $temp);
-                if (false !== strpos($temp, 'smppc')) {
-                    $row['connectors'][] = $temp;
-                }
-
-                if (false !== strpos($temp, '<')) {
-                    $row['filters'][] = $temp;
-                }
-            }
+            //Get all filters
+            preg_match_all('~<(.*?)>~', $router, $MTfilters);
+            $row->filters = $MTfilters[0];
 
             $routers[] = $row;
         }
