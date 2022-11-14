@@ -41,24 +41,25 @@ class MoRouter extends BaseCommand
             $router = preg_replace(['/\s{2,}/', '/(<\w)(\s)?/'], [' ','$1'], $router);
             $fixed_routers = explode(' ', $router);
 
-            $row = [
+            $row = (object) [
                 'order'     => (int)array_shift($fixed_routers),
                 'type'      => array_shift($fixed_routers),
                 'connectors' => [],
                 'filters'   => [],
             ];
 
-            foreach ($fixed_routers as $temp) {
-                $temp = str_replace(',', '', $temp);
-                if (false !== strpos($temp, 'http') || false !== strpos($temp, 'smpps')) {
-                    $row['connectors'][] = $temp;
-                }
+            
+            //Get all http connectors
+            preg_match_all('~http\((.*?)\)~', $router, $MOhttpConnectors);
+            
+            //Get all smpps connectors
+            preg_match_all('~smpps\((.*?)\)~', $router, $MOsmppsConnectors);
+            $row->connectors = array_merge($MOhttpConnectors[0],$MOsmppsConnectors[0]);
 
-                if (false !== strpos($temp, '<')) {
-                    $row['filters'][] = $temp;
-                }
+            //Get all filters
+            preg_match_all('~<(.*?)>~', $router, $MTfilters);
+            $row->filters = $MTfilters[0];
 
-            }
 
             $routers[] = $row;
         }
