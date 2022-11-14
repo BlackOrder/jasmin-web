@@ -30,7 +30,7 @@ class Group extends BaseCommand
                 $group = trim($ff);
             }
 
-            $groups[]['gid'] = $group;
+            $groups[] = (object) [ 'gid' => $group ];
         }
 
         return $groups;
