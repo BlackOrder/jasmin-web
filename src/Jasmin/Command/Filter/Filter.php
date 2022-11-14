@@ -6,9 +6,17 @@ use JasminWeb\Jasmin\Command\AddValidator;
 use JasminWeb\Jasmin\Command\BaseCommand;
 
 class Filter extends BaseCommand {
-  public const TRANSPARENT = 'transparentfilter';
-  public const USER = 'userfilter';
-  public const CONNECTOR = 'connectorfilter';
+  public const TRANSPARENT = 'TransparentFilter';
+  public const CONNECTOR = 'ConnectorFilter';
+  public const USER = 'UserFilter';
+  public const GROUP = 'GroupFilter';
+  public const SOURCEADD = 'SourceAddrFilter';
+  public const DESTINATIONADD = 'DestinationAddrFilter';
+  public const SHORTMESS = 'ShortMessageFilter';
+  public const DATEINTERV = 'DateIntervalFilter';
+  public const TIMEINTERV = 'TimeIntervalFilter';
+  public const TAG = 'TagFilter';
+  public const EVAL = 'EvalPyFilter';
 
   /**
    * @return AddValidator

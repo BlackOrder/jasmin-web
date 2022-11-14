@@ -20,11 +20,35 @@ class FilterAddValidator extends InternalAddValidator {
   protected function resolveValidator(array $data): ?AddValidator{
     $validator = null;
     switch (strtolower($data['type'])) {
+    case Filter::CONNECTOR:
+      $validator = new ConnectorFilterValidator();
+      break;
     case Filter::USER:
       $validator = new UserFilterAddValidator();
       break;
-    case Filter::CONNECTOR:
-      $validator = new ConnectorFilterValidator();
+    case Filter::GROUP:
+      $validator = new GroupFilterValidator();
+      break;
+    case Filter::SOURCEADD:
+      $validator = new SourceAddrFilterValidator();
+      break;
+    case Filter::DESTINATIONADD:
+      $validator = new DestinationAddrFilterValidator();
+      break;
+    case Filter::SHORTMESS:
+      $validator = new ShortMessageFilterValidator();
+      break;
+    case Filter::DATEINTERV:
+      $validator = new DateIntervalFilterValidator();
+      break;
+    case Filter::TIMEINTERV:
+      $validator = new TimeIntervalFilterValidator();
+      break;
+    case Filter::TAG:
+      $validator = new TagFilterValidator();
+      break;
+    case Filter::EVAL:
+      $validator = new EvalPyFilterValidator();
       break;
     case Filter::TRANSPARENT:
       $validator = new class extends AddValidator {
