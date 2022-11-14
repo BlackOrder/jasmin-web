@@ -48,14 +48,19 @@ class User extends BaseCommand
                 $fixed_connector[] = $temp;
             }
 
-            $users[] = [
-                'uid'        => $fixed_connector[0],
-                'gid'        => $fixed_connector[1],
-                'username'   => $fixed_connector[2],
-                'balance'    => $fixed_connector[3],
-                'mt'         => $fixed_connector[4],
-                'sms'        => $fixed_connector[5],
-                'throughput' => $fixed_connector[6],
+      // get throughput parts
+      $throughput = explode('/', $fixed_connector[5]);
+
+      $users[] = (object) [
+        'uid' => $fixed_connector[0],
+        'gid' => $fixed_connector[1],
+        'username' => $fixed_connector[2],
+        'balance' => $fixed_connector[3],
+        'sms' => $fixed_connector[4],
+        'throughput' => [
+          'http' => $throughput[0],
+          'smpps' => $throughput[1],
+        ],
             ];
         }
 
