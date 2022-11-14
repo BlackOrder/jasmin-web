@@ -7,8 +7,10 @@ use JasminWeb\Jasmin\Command\BaseCommand;
 
 class MtRouter extends BaseCommand
 {
-    public const STATIC = 'staticmtroute';
-    public const DEFAULT = 'defaultroute';
+    public const STATIC = 'StaticMTRoute';
+    public const DEFAULT = 'DefaultRoute';
+    public const RANDOM = 'RandomRoundrobinMTRoute';
+    public const FAILOVER = 'FailoverMTRoute';
 
     /**
      * @return AddValidator
@@ -49,7 +51,7 @@ class MtRouter extends BaseCommand
                 'connectors' => [],
                 'filters' => []
             ];
-
+            
             //Get all connectors
             preg_match_all('~smppc\((.*?)\)~', $router, $MTconnectors);
             $row->connectors = $MTconnectors[0];
