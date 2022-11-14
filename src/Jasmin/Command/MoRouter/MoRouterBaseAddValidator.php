@@ -16,10 +16,14 @@ class MoRouterBaseAddValidator extends InternalAddValidator {
 
   protected function resolveValidator(array $data): ?AddValidator {
     switch (strtolower($data['type'])) {
-    case MoRouter::DEFAULT:
-      return new DefaultMoRouteValidator();
     case MoRouter::STATIC :
       return new StaticMoRouteValidator();
+    case MoRouter::DEFAULT:
+      return new DefaultMoRouteValidator();
+    case MoRouter::RANDOM:
+      return new RandomRoundrobinMORouteValidator();
+    case MoRouter::FAILOVER:
+      return new FailoverMORouteValidator();
     default:
       return null;
     }
