@@ -27,6 +27,10 @@ class MtRouterBaseValidator extends InternalAddValidator {
       return new StaticMtRouteValidator();
     case MtRouter::DEFAULT:
       return new DefaultMtRouteValidator();
+    case MtRouter::RANDOM:
+      return new RandomRoundrobinMTRouteValidator();
+    case MtRouter::FAILOVER:
+      return new FailoverMTRouteValidator();
     default:
       return null;
     }
