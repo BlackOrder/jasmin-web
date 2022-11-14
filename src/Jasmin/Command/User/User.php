@@ -8,45 +8,42 @@ use JasminWeb\Jasmin\Command\ChangeStateTrait;
 use RecursiveArrayIterator;
 use RecursiveIteratorIterator;
 
-class User extends BaseCommand
-{
-    use ChangeStateTrait;
+class User extends BaseCommand {
+  use ChangeStateTrait;
 
-    /**
-     * @return AddValidator
-     */
-    protected function getAddValidator(): AddValidator
-    {
-        return new UserAddValidator();
-    }
+  /**
+   * @return AddValidator
+   */
+  protected function getAddValidator(): AddValidator {
+    return new UserAddValidator();
+  }
 
-    protected function getName(): string
-    {
-        return 'user';
-    }
+  protected function getName(): string {
+    return 'user';
+  }
 
-    /**
-     * @param array $exploded
-     * @return array
-     */
-    protected function parseList(array $exploded): array
-    {
-        $users = [];
-        foreach ($exploded as $item) {
-            $user = trim($item);
+  /**
+   * @param array $exploded
+   * @return array
+   */
+  protected function parseList(array $exploded): array
+  {
+    $users = [];
+    foreach ($exploded as $item) {
+      $user = trim($item);
 
-            $ff = strstr($item, 'Total Users:', true);
-            if (!empty($ff)) {
-                $user = trim($ff);
-            }
+      $ff = strstr($item, 'Total Users:', true);
+      if (!empty($ff)) {
+        $user = trim($ff);
+      }
 
-            $temp_user = explode(' ', $user);
-            $temp_user = array_filter($temp_user);
+      $temp_user = explode(' ', $user);
+      $temp_user = array_filter($temp_user);
 
-            $fixed_connector = [];
-            foreach ($temp_user as $temp) {
-                $fixed_connector[] = $temp;
-            }
+      $fixed_connector = [];
+      foreach ($temp_user as $temp) {
+        $fixed_connector[] = $temp;
+      }
 
       // get throughput parts
       $throughput = explode('/', $fixed_connector[5]);
@@ -61,59 +58,58 @@ class User extends BaseCommand
           'http' => $throughput[0],
           'smpps' => $throughput[1],
         ],
-            ];
-        }
-
-        return $users;
+      ];
     }
 
-    /**
-     * @param array $exploded
-     * @return array
-     */
-    protected function parseShow(array $exploded): array
-    {
-        $options = [];
-        foreach ($exploded as $row) {
-            $user = trim($row);
+    return $users;
+  }
 
-            if (false !== strpos($user, 'jcli :')) {
-                continue;
-            }
+  /**
+   * @param array $exploded
+   * @return array
+   */
+  protected function parseShow(array $exploded): array
+  {
+    $options = [];
+    foreach ($exploded as $row) {
+      $user = trim($row);
 
-            $values = explode(' ', $user);
-            $last = $values[($c = count($values)) - 1];
-            $first = array_shift($values);
+      if (false !== strpos($user, 'jcli :')) {
+        continue;
+      }
 
-            $item[$first] = [];
-            $current = &$item[$first];
-            foreach ($values as $value) {
-                $value = trim($value);
-                if ($c === 2 || $value === $last) {
-                    $current = $last;
-                    break;
-                }
+      $values = explode(' ', $user);
+      $last = $values[($c = count($values)) - 1];
+      $first = array_shift($values);
 
-                $current[$value] = [];
-                $current = &$current[$value];
-            }
-
-            $options[] = $item;
+      $item[$first] = [];
+      $current = &$item[$first];
+      foreach ($values as $value) {
+        $value = trim($value);
+        if ($c === 2 || $value === $last) {
+          $current = $last;
+          break;
         }
 
-        $iterator = new RecursiveIteratorIterator(
-            new RecursiveArrayIterator($options),
-            RecursiveIteratorIterator::CATCH_GET_CHILD
-        );
-        foreach ($iterator as $key => $leaf) {
-            echo "$key => $leaf", PHP_EOL;
-        }
+        $current[$value] = [];
+        $current = &$current[$value];
+      }
 
-        return $options;
+      $options[] = $item;
     }
 
-    protected function isHeavy(): bool
-    {
-        return false;
+    $iterator = new RecursiveIteratorIterator(
+      new RecursiveArrayIterator($options),
+      RecursiveIteratorIterator::CATCH_GET_CHILD
+    );
+    foreach ($iterator as $key => $leaf) {
+      echo "$key => $leaf", PHP_EOL;
     }
+
+    return $options;
+  }
+
+  protected function isHeavy(): bool {
+    return false;
+  }
 }
