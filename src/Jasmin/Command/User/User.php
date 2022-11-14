@@ -54,7 +54,7 @@ class User extends BaseCommand {
         'username' => $fixed_connector[2],
         'balance' => $fixed_connector[3],
         'sms' => $fixed_connector[4],
-        'throughput' => [
+        'throughput' => (object) [
           'http' => $throughput[0],
           'smpps' => $throughput[1],
         ],
