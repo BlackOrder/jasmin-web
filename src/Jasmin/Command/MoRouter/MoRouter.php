@@ -74,7 +74,7 @@ class MoRouter extends BaseCommand {
       $data['filters'] = implode(';', $data['filters']);
     }
 
-    if (isset($data['connectors']) && !empty($data['filters'])) {
+    if (isset($data['connectors']) && !empty($data['connectors'])) {
       $data['connectors'] = implode(';', $data['connectors']);
     }
 
