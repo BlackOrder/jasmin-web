@@ -63,7 +63,7 @@ class Session
 
         $result = $connection->read();
 
-        if (false !== strpos($result, 'Incorrect')) {
+        if (false !== strpos($result, 'Incorrect Username/Password')) {
             throw new \InvalidArgumentException('Incorrect Username/Password');
         }
 
