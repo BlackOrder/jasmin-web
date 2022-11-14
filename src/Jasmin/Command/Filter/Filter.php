@@ -50,18 +50,19 @@ class Filter extends BaseCommand
                 $fixed_connector[] = $temp;
             }
 
-            $row = [];
-            $row['fid'] = $fixed_connector[0];
-            $row['type'] = $fixed_connector[1];
-            $row['description'] = substr($filter, strpos($filter, '<'), strpos($filter, '>'));
-            $row['routes'] = [];
+            $row = (object) [
+                'fid' => $fixed_connector[0],
+                'type' => $fixed_connector[1],
+                'description' => substr($filter, strpos($filter, '<'), strpos($filter, '>')),
+                'routes' => [],
+            ];
 
             if (false !== strpos($filter, 'MT')) {
-                $row['routes'][] = 'MT';
+                $row->routes[] = 'MT';
             }
 
             if (false !== strpos($filter, 'MO')) {
-                $row['routes'][] = 'MO';
+                $row->routes[] = 'MO';
             }
 
             $filters[] = $row;
