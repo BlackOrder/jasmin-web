@@ -6,45 +6,42 @@ use JasminWeb\Jasmin\Command\AddValidator;
 use JasminWeb\Jasmin\Command\BaseCommand;
 use JasminWeb\Jasmin\Command\ChangeStateTrait;
 
-class Connector extends BaseCommand
-{
-    use ChangeStateTrait;
+class Connector extends BaseCommand {
+  use ChangeStateTrait;
 
-    /**
-     * @return AddValidator
-     */
-    protected function getAddValidator(): AddValidator
-    {
-        return new SmppConnectorAddValidator();
-    }
+  /**
+   * @return AddValidator
+   */
+  protected function getAddValidator(): AddValidator {
+    return new SmppConnectorAddValidator();
+  }
 
-    protected function getName(): string
-    {
-        return 'smppccm';
-    }
+  protected function getName(): string {
+    return 'smppccm';
+  }
 
-    /**
-     * @param array $exploded
-     * @return array
-     */
-    protected function parseList(array $exploded): array
-    {
-        $connectors = [];
-        foreach ($exploded as $expl) {
-            $row = trim($expl);
+  /**
+   * @param array $exploded
+   * @return array
+   */
+  protected function parseList(array $exploded): array
+  {
+    $connectors = [];
+    foreach ($exploded as $expl) {
+      $row = trim($expl);
 
-            $ff = strstr($expl, 'Total connectors:', true);
-            if (!empty($ff)) {
-                $row = trim($ff);
-            }
+      $ff = strstr($expl, 'Total connectors:', true);
+      if (!empty($ff)) {
+        $row = trim($ff);
+      }
 
-            $temp_row = explode(' ', $row);
-            $temp_row = array_filter($temp_row);
+      $temp_row = explode(' ', $row);
+      $temp_row = array_filter($temp_row);
 
-            $fixed_row = array();
-            foreach ($temp_row as $temp){
-                $fixed_row[] = $temp;
-            }
+      $fixed_row = array();
+      foreach ($temp_row as $temp) {
+        $fixed_row[] = $temp;
+      }
 
       $connectors[] = (object) [
         'cid' => $fixed_row[0],
@@ -53,35 +50,32 @@ class Connector extends BaseCommand
         'starts' => (int) ($fixed_row[3] ?? 0),
         'stops' => (int) ($fixed_row[4] ?? 0),
       ];
-        }
-
-        return $connectors;
     }
 
-    /**
-     * @param string $key
-     * @return bool
-     * @throws \JasminWeb\Exception\ConnectorException
-     */
-    public function enable(string $key): bool
-    {
-        $r = $this->session->runCommand($this->getName() . ' -1 ' . $key , true);
-        return $this->parseResult($r);
-    }
+    return $connectors;
+  }
 
-    /**
-     * @param string $key
-     * @return bool
-     * @throws \JasminWeb\Exception\ConnectorException
-     */
-    public function disable(string $key)
-    {
-        $r = $this->session->runCommand($this->getName() . ' -0 ' . $key, true);
-        return $this->parseResult($r);
-    }
+  /**
+   * @param string $key
+   * @return bool
+   * @throws \JasminWeb\Exception\ConnectorException
+   */
+  public function enable(string $key): bool {
+    $r = $this->session->runCommand($this->getName() . ' -1 ' . $key, true);
+    return $this->parseResult($r);
+  }
 
-    protected function isHeavy(): bool
-    {
-        return true;
-    }
+  /**
+   * @param string $key
+   * @return bool
+   * @throws \JasminWeb\Exception\ConnectorException
+   */
+  public function disable(string $key) {
+    $r = $this->session->runCommand($this->getName() . ' -0 ' . $key, true);
+    return $this->parseResult($r);
+  }
+
+  protected function isHeavy(): bool {
+    return true;
+  }
 }
