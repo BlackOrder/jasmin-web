@@ -30,6 +30,6 @@ class MoRouterBaseAddValidator extends InternalAddValidator {
   }
 
   protected function addResolveError(array $data): void {
-    $this->errors[$data['type']] = 'Unknown type' . $data['type'];
+    $this->errors[$data['type']] = 'Unknown type ' . $data['type'];
   }
 }
