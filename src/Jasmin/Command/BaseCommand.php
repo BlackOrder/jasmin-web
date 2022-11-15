@@ -32,7 +32,7 @@ abstract class BaseCommand {
    * @return bool
    */
   protected function isHeavy(): bool {
-    return false;
+    return $this->session->defaultHeavy;
   }
 
   /**

@@ -25,6 +25,13 @@ class Session {
   public $defaultNeedPersist = false;
 
   /**
+   * Default isHeavy to be use in commands
+   *
+   * @var bool
+   */
+  public $defaultHeavy = false;
+
+  /**
    * Session constructor.
    *
    * @param SocketConnection $connection
@@ -84,9 +91,13 @@ class Session {
    *
    * @throws ConnectorException
    */
-  public function runCommand(string $command, bool $needWaitBeforeRead = false) {
+  public function runCommand(string $command, bool $needWaitBeforeRead = null) {
     if (!$this->connection->isAlive()) {
       throw new ConnectorException('Try execute command without open socket');
+    }
+
+    if(is_null($needWaitBeforeRead)){
+      $needWaitBeforeRead = $this->defaultHeavy;
     }
 
     $command = trim($command) . PHP_EOL;
