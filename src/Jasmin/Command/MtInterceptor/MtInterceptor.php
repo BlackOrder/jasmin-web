@@ -48,7 +48,7 @@ class MtInterceptor extends BaseCommand {
 
       //Get script
       preg_match('~<(MOIS.*?)>~', $interceptor, $MtInterceptorScript);
-      $row->script = $MtInterceptorFilters[0][0];
+      $row->script = $MtInterceptorScript[0];
 
       //Get all filters
       preg_match_all('~<([^MOIS]*?)>~', $interceptor, $MtInterceptorFilters);
