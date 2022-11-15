@@ -67,7 +67,7 @@ class SocketConnection {
     $rwtimeout = (float) $start;
     $rwtimeout = $rwtimeout > 0 ? $rwtimeout : -1;
     $timeoutSeconds = floor($rwtimeout);
-    $timeoutUSeconds = ($rwtimeout - $timeoutSeconds) * 1000000;
+    $timeoutUSeconds = floor(($rwtimeout - $timeoutSeconds) * 1000000);
     stream_set_timeout($resource, $timeoutSeconds, $timeoutUSeconds);
 
     return new self($resource, $waitTime < self::DEFAULT_SLEEP_TIME ? self::DEFAULT_SLEEP_TIME : $waitTime);
