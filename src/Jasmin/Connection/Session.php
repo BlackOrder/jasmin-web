@@ -18,6 +18,13 @@ class Session {
   protected $profile;
 
   /**
+   * Default isNeedPersist to be use in commands
+   *
+   * @var bool
+   */
+  public $defaultNeedPersist = false;
+
+  /**
    * Session constructor.
    *
    * @param SocketConnection $connection

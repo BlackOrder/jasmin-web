@@ -41,6 +41,6 @@ abstract class BaseCommand {
    * @return bool
    */
   protected function isNeedPersist(): bool {
-    return false;
+    return $this->session->defaultNeedPersist;
   }
 }
