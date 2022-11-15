@@ -75,7 +75,7 @@ class Filter extends BaseCommand {
 
     return $filters;
   }
-  
+
   /**
    * {@inheritdoc}
    */

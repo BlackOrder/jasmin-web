@@ -96,7 +96,7 @@ class Session {
       throw new ConnectorException('Try execute command without open socket');
     }
 
-    if(is_null($needWaitBeforeRead)){
+    if (is_null($needWaitBeforeRead)) {
       $needWaitBeforeRead = $this->defaultHeavy;
     }
 

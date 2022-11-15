@@ -5,8 +5,6 @@ namespace JasminWeb\Jasmin\Command\User;
 use JasminWeb\Jasmin\Command\AddValidator;
 use JasminWeb\Jasmin\Command\BaseCommand;
 use JasminWeb\Jasmin\Command\ChangeStateTrait;
-use RecursiveArrayIterator;
-use RecursiveIteratorIterator;
 
 class User extends BaseCommand {
   use ChangeStateTrait;
@@ -49,7 +47,7 @@ class User extends BaseCommand {
       $throughput = explode('/', $fixed_connector[5]);
 
       //catch if row contains data or is it Header
-      if(count($throughput) < 2){
+      if (count($throughput) < 2) {
         continue;
       }
 
@@ -73,8 +71,7 @@ class User extends BaseCommand {
    * @param array $exploded
    * @return object
    */
-  protected function parseShow(array $exploded): object
-  {
+  protected function parseShow(array $exploded): object {
     $options = [];
     foreach ($exploded as $row) {
       $option = trim($row);
@@ -87,20 +84,20 @@ class User extends BaseCommand {
       $value = array_pop($option);
       $key = implode(' ', $option);
 
-      if(empty($key)){
+      if (empty($key)) {
         continue;
       }
 
       $key = explode(' ', $key);
 
-      while(count($key) > 1){
+      while (count($key) > 1) {
         $tmpKey = array_pop($key);
-        $value = [ $tmpKey => $value ];
+        $value = [$tmpKey => $value];
       }
 
       $key = $key[0];
-      
-      $options = array_merge_recursive($options, [ $key => $value ]);
+
+      $options = array_merge_recursive($options, [$key => $value]);
     }
 
     return json_decode(json_encode($options));

@@ -7,8 +7,7 @@ trait ShowTrait {
    * @param string $key
    * @return object
    */
-  public function show(string $key): object
-  {
+  public function show(string $key): object {
     $response = $this->session->runCommand($this->getName() . ' -s ' . $key);
 
     $exploded = explode("\n", $response);
