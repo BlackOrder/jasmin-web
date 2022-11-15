@@ -48,6 +48,11 @@ class User extends BaseCommand {
       // get throughput parts
       $throughput = explode('/', $fixed_connector[5]);
 
+      //catch if row contains data or is it Header
+      if(count($throughput) < 2){
+        continue;
+      }
+
       $users[] = (object) [
         'uid' => $fixed_connector[0],
         'gid' => $fixed_connector[1],
