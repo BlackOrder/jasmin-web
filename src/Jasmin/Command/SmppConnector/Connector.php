@@ -62,6 +62,11 @@ class Connector extends BaseCommand {
    */
   public function enable(string $key): bool {
     $r = $this->session->runCommand($this->getName() . ' -1 ' . $key, true);
+    
+    if ($this->isNeedPersist()) {
+      $this->session->persist();
+    }
+
     return $this->parseResult($r);
   }
 
@@ -72,6 +77,11 @@ class Connector extends BaseCommand {
    */
   public function disable(string $key) {
     $r = $this->session->runCommand($this->getName() . ' -0 ' . $key, true);
+    
+    if ($this->isNeedPersist()) {
+      $this->session->persist();
+    }
+    
     return $this->parseResult($r);
   }
 
