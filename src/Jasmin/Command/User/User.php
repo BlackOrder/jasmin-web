@@ -112,13 +112,6 @@ class User extends BaseCommand {
   /**
    * {@inheritdoc}
    */
-  protected function isHeavy(): bool {
-    return false;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
   protected function isNeedPersist(): bool {
     return true;
   }
