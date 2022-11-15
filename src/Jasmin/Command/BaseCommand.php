@@ -5,7 +5,7 @@ namespace JasminWeb\Jasmin\Command;
 use JasminWeb\Jasmin\Connection\Session;
 
 abstract class BaseCommand {
-  use ListTrait, AddTrait, ShowTrait, RemoveTrait;
+  use ListTrait, AddTrait, RemoveTrait;
 
   /**
    * @var Session

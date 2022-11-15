@@ -7,7 +7,7 @@ use JasminWeb\Jasmin\Command\BaseCommand;
 use JasminWeb\Jasmin\Command\ChangeStateTrait;
 
 class Connector extends BaseCommand {
-  use ChangeStateTrait;
+  use ChangeStateTrait, ShowTrait;
 
   /**
    * @return AddValidator
