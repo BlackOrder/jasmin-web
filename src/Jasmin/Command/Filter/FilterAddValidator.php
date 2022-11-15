@@ -19,7 +19,7 @@ class FilterAddValidator extends InternalAddValidator {
    */
   protected function resolveValidator(array $data): ?AddValidator{
     $validator = null;
-    switch (strtolower($data['type'])) {
+    switch ($data['type']) {
     case Filter::CONNECTOR:
       $validator = new ConnectorFilterValidator();
       break;
