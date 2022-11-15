@@ -5,6 +5,7 @@ namespace JasminWeb\Jasmin\Command\User;
 use JasminWeb\Jasmin\Command\AddValidator;
 use JasminWeb\Jasmin\Command\BaseCommand;
 use JasminWeb\Jasmin\Command\ChangeStateTrait;
+use JasminWeb\Jasmin\Command\ShowTrait;
 
 class User extends BaseCommand {
   use ChangeStateTrait, ShowTrait;
