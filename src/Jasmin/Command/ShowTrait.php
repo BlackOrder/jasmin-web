@@ -5,9 +5,9 @@ namespace JasminWeb\Jasmin\Command;
 trait ShowTrait {
   /**
    * @param string $key
-   * @return array
+   * @return object
    */
-  public function show(string $key): array
+  public function show(string $key): object
   {
     $response = $this->session->runCommand($this->getName() . ' -s ' . $key);
 
@@ -19,7 +19,7 @@ trait ShowTrait {
 
   /**
    * @param array $exploded
-   * @return array
+   * @return object
    */
-  abstract protected function parseShow(array $exploded): array;
+  abstract protected function parseShow(array $exploded): object;
 }

@@ -71,47 +71,39 @@ class User extends BaseCommand {
 
   /**
    * @param array $exploded
-   * @return array
+   * @return object
    */
-  protected function parseShow(array $exploded): array
+  protected function parseShow(array $exploded): object
   {
     $options = [];
     foreach ($exploded as $row) {
-      $user = trim($row);
+      $option = trim($row);
 
-      if (false !== strpos($user, 'jcli :')) {
+      if (false !== strpos($option, 'jcli :')) {
         continue;
       }
 
-      $values = explode(' ', $user);
-      $last = $values[($c = count($values)) - 1];
-      $first = array_shift($values);
+      $option = explode(' ', $option);
+      $value = array_pop($option);
+      $key = implode(' ', $option);
 
-      $item[$first] = [];
-      $current = &$item[$first];
-      foreach ($values as $value) {
-        $value = trim($value);
-        if ($c === 2 || $value === $last) {
-          $current = $last;
-          break;
-        }
-
-        $current[$value] = [];
-        $current = &$current[$value];
+      if(empty($key)){
+        continue;
       }
 
-      $options[] = $item;
+      $key = explode(' ', $key);
+
+      while(count($key) > 1){
+        $tmpKey = array_pop($key);
+        $value = [ $tmpKey => $value ];
+      }
+
+      $key = $key[0];
+      
+      $options = array_merge_recursive($options, [ $key => $value ]);
     }
 
-    $iterator = new RecursiveIteratorIterator(
-      new RecursiveArrayIterator($options),
-      RecursiveIteratorIterator::CATCH_GET_CHILD
-    );
-    foreach ($iterator as $key => $leaf) {
-      echo "$key => $leaf", PHP_EOL;
-    }
-
-    return $options;
+    return json_decode(json_encode($options));
   }
 
   /**
