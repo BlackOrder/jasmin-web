@@ -75,7 +75,17 @@ class Connector extends BaseCommand {
     return $this->parseResult($r);
   }
 
+  /**
+   * {@inheritdoc}
+   */
   protected function isHeavy(): bool {
+    return true;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function isNeedPersist(): bool {
     return true;
   }
 }

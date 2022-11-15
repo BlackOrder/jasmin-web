@@ -51,10 +51,16 @@ class Connector extends BaseCommand {
     return $connectors;
   }
 
+  /**
+   * {@inheritdoc}
+   */
   protected function isHeavy(): bool {
     return true;
   }
 
+  /**
+   * {@inheritdoc}
+   */
   protected function isNeedPersist(): bool {
     return true;
   }

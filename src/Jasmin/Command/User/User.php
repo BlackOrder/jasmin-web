@@ -109,7 +109,17 @@ class User extends BaseCommand {
     return $options;
   }
 
+  /**
+   * {@inheritdoc}
+   */
   protected function isHeavy(): bool {
     return false;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function isNeedPersist(): bool {
+    return true;
   }
 }

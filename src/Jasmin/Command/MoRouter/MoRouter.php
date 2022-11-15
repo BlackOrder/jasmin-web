@@ -64,7 +64,17 @@ class MoRouter extends BaseCommand {
     return $routers;
   }
 
+  /**
+   * {@inheritdoc}
+   */
   protected function isHeavy(): bool {
+    return true;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function isNeedPersist(): bool {
     return true;
   }
 
