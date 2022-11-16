@@ -1,0 +1,102 @@
+<?php
+
+namespace JasminWeb\Jasmin\Command\SmppConnector;
+
+use JasminWeb\Jasmin\Command\AddValidator;
+use JasminWeb\Jasmin\Command\BaseCommand;
+use JasminWeb\Jasmin\Command\ChangeStateTrait;
+use JasminWeb\Jasmin\Command\ShowTrait;
+
+class Connector extends BaseCommand {
+  use ChangeStateTrait, ShowTrait;
+
+  /**
+   * @return AddValidator
+   */
+  protected function getAddValidator(): AddValidator {
+    return new SmppConnectorAddValidator();
+  }
+
+  protected function getName(): string {
+    return 'smppccm';
+  }
+
+  /**
+   * @param array $exploded
+   * @return array
+   */
+  protected function parseList(array $exploded): array
+  {
+    $connectors = [];
+    foreach ($exploded as $expl) {
+      $row = trim($expl);
+
+      $ff = strstr($expl, 'Total connectors:', true);
+      if (!empty($ff)) {
+        $row = trim($ff);
+      }
+
+      $temp_row = explode(' ', $row);
+      $temp_row = array_filter($temp_row);
+
+      $fixed_row = array();
+      foreach ($temp_row as $temp) {
+        $fixed_row[] = $temp;
+      }
+
+      $connectors[] = (object) [
+        'cid' => $fixed_row[0],
+        'service' => $fixed_row[1],
+        'session' => $fixed_row[2],
+        'starts' => (int) ($fixed_row[3] ?? 0),
+        'stops' => (int) ($fixed_row[4] ?? 0),
+      ];
+    }
+
+    return $connectors;
+  }
+
+  /**
+   * @param string $key
+   * @return bool
+   * @throws \JasminWeb\Exception\ConnectorException
+   */
+  public function enable(string $key): bool {
+    $r = $this->session->runCommand($this->getName() . ' -1 ' . $key, true);
+
+    if ($this->isNeedPersist()) {
+      $this->session->persist();
+    }
+
+    return $this->parseResult($r);
+  }
+
+  /**
+   * @param string $key
+   * @return bool
+   * @throws \JasminWeb\Exception\ConnectorException
+   */
+  public function disable(string $key): bool {
+    $r = $this->session->runCommand($this->getName() . ' -0 ' . $key, true);
+
+    if ($this->isNeedPersist()) {
+      $this->session->persist();
+    }
+
+    return $this->parseResult($r);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function isHeavy(): bool {
+    return true;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function isNeedPersist(): bool {
+    return true;
+  }
+}

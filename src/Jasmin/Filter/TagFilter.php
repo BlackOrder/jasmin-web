@@ -6,9 +6,6 @@
 
 namespace JasminWeb\Jasmin\Filter;
 
-use JasminWeb\Jasmin\TelnetConnector;
-
-class TagFilter extends Filter
-{
+class TagFilter extends Filter {
 
 }

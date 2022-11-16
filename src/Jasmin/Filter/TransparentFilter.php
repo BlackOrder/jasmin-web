@@ -6,9 +6,6 @@
 
 namespace JasminWeb\Jasmin\Filter;
 
-use JasminWeb\Jasmin\TelnetConnector;
-
-class TransparentFilter extends Filter
-{
+class TransparentFilter extends Filter {
 
 }
