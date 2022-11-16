@@ -48,4 +48,11 @@ class Group extends BaseCommand {
   protected function getAddValidator(): AddValidator {
     return new GroupAddValidator();
   }
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function isNeedPersist(): bool {
+    return true;
+  }
 }
