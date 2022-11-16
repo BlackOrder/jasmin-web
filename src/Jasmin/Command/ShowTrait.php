@@ -41,6 +41,10 @@ trait ShowTrait {
 
       while (count($key) > 1) {
         $tmpKey = array_pop($key);
+        if ($tmpKey == '=') {
+          continue;
+        }
+
         $value = [$tmpKey => $value];
       }
 

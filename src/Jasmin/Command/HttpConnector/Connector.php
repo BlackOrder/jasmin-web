@@ -4,8 +4,11 @@ namespace JasminWeb\Jasmin\Command\HttpConnector;
 
 use JasminWeb\Jasmin\Command\AddValidator;
 use JasminWeb\Jasmin\Command\BaseCommand;
+use JasminWeb\Jasmin\Command\ShowTrait;
 
 class Connector extends BaseCommand {
+  use ShowTrait;
+
   /**
    * @return AddValidator
    */
