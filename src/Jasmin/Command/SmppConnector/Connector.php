@@ -5,10 +5,11 @@ namespace JasminWeb\Jasmin\Command\SmppConnector;
 use JasminWeb\Jasmin\Command\AddValidator;
 use JasminWeb\Jasmin\Command\BaseCommand;
 use JasminWeb\Jasmin\Command\ChangeStateTrait;
+use JasminWeb\Jasmin\Command\EditTrait;
 use JasminWeb\Jasmin\Command\ShowTrait;
 
 class Connector extends BaseCommand {
-  use ChangeStateTrait, ShowTrait;
+  use ChangeStateTrait, ShowTrait, EditTrait;
 
   /**
    * @return AddValidator
