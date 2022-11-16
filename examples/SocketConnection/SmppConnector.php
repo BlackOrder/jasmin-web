@@ -18,6 +18,14 @@ $manager->add([
   'cid' => 'new_smppConnector_id',
 ], $errors);
 
+// Edit a SmppConnector
+$errors = '';
+$cid = 'some_smppConnector_id';
+$data = [
+  'username' => 'changed_me'
+];
+$manager->edit($cid, $data, $errors);
+
 // Show a SmppConnector
 $manager->show('some_smppConnector_id');
 

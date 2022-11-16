@@ -21,6 +21,14 @@ $manager->add([
   'password' => 'new_user_password',
 ], $errors);
 
+// Edit a User
+$errors = '';
+$uid = 'Telemedia';
+$data = [
+  'mt_messaging_cred quota sms_count' => 500000
+];
+$manager->edit($uid, $data, $errors);
+
 // Show a User
 $manager->show('some_user_id');
 
