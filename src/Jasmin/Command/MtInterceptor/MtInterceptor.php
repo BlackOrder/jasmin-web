@@ -47,11 +47,11 @@ class MtInterceptor extends BaseCommand {
       ];
 
       //Get script
-      preg_match('~<(MTIS.*?)>~', $interceptor, $MtInterceptorScript);
+      preg_match('~<MTIS(.*?)>~', $interceptor, $MtInterceptorScript);
       $row->script = $MtInterceptorScript[0];
 
       //Get all filters
-      preg_match_all('~<([^MTIS]*?)>~', $interceptor, $MtInterceptorFilters);
+      preg_match_all('~<((?!MTIS).*?)>~', $interceptor, $MtInterceptorFilters);
       $row->filters = $MtInterceptorFilters[0];
 
       $interceptors[] = $row;
