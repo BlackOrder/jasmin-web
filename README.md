@@ -1,11 +1,11 @@
 # jasmin-web
-Simple package that allow work with jasmin-sms settings with php. Allow change settings for outer services.
+Simple package that allow work with jasmin-sms v0.10 settings with php. Allow change settings for outer services.
 
 ## Installation 
 
 Require this package in your `composer.json` file:
 
-`"haegemon/jasmin-web": "dev-master"`
+`"blackorder/jasmin-web": "dev-master"`
 
 ...then run `composer update` to download the package to your vendor directory.
 
@@ -17,7 +17,7 @@ Realise base part of working with User, Group, Connector, Filter (User filter, C
 
 ## Examples:
 
-You can find some expamples at folder [examples](https://github.com/haegemon/jasmin-web/tree/master/examples).
+You can find some expamples at folder [examples](https://github.com/BlackOrder/jasmin-web/tree/master/examples).
 
 ## Test
 
