@@ -28,7 +28,15 @@ class Group extends BaseCommand {
         $group = trim($ff);
       }
 
-      $groups[] = (object) ['gid' => $group];
+      
+      $gid = ltrim($group, '!');
+      $active = $gid === $group;
+
+
+      $groups[] = (object) [
+        'gid' => $gid,
+        'active' => (bool) $active,
+      ];
     }
 
     return $groups;

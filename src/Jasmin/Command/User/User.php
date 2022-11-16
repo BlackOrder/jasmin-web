@@ -52,9 +52,14 @@ class User extends BaseCommand {
         continue;
       }
 
+      $uid = ltrim($fixed_connector[0], '!');
+      $gid = ltrim($fixed_connector[1], '!');
+      $active = $uid === $fixed_connector[0] && $gid === $fixed_connector[1];
+
       $users[] = (object) [
-        'uid' => $fixed_connector[0],
-        'gid' => $fixed_connector[1],
+        'uid' => $uid,
+        'gid' => $gid,
+        'active' => (bool) $active,
         'username' => $fixed_connector[2],
         'balance' => $fixed_connector[3],
         'sms' => $fixed_connector[4],
