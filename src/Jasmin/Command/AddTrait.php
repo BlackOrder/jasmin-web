@@ -38,6 +38,10 @@ trait AddTrait {
       return true;
     }
 
+    // close session on failure
+    $command = 'ko' . PHP_EOL;
+    $this->session->runCommand($command, $this->isHeavy());
+
     $errorStr = strtolower($result);
     return false;
   }
