@@ -4,8 +4,11 @@ namespace JasminWeb\Jasmin\Command\MtInterceptor;
 
 use JasminWeb\Jasmin\Command\AddValidator;
 use JasminWeb\Jasmin\Command\BaseCommand;
+use JasminWeb\Jasmin\Command\FlushTrait;
 
 class MtInterceptor extends BaseCommand {
+  use FlushTrait;
+
   public const STATIC  = 'StaticMTInterceptor';
   public const DEFAULT = 'DefaultInterceptor';
 

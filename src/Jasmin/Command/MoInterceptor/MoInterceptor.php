@@ -4,8 +4,11 @@ namespace JasminWeb\Jasmin\Command\MoInterceptor;
 
 use JasminWeb\Jasmin\Command\AddValidator;
 use JasminWeb\Jasmin\Command\BaseCommand;
+use JasminWeb\Jasmin\Command\FlushTrait;
 
 class MoInterceptor extends BaseCommand {
+  use FlushTrait;
+
   public const STATIC  = 'StaticMOInterceptor';
   public const DEFAULT = 'DefaultInterceptor';
 

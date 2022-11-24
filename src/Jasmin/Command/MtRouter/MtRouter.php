@@ -4,8 +4,11 @@ namespace JasminWeb\Jasmin\Command\MtRouter;
 
 use JasminWeb\Jasmin\Command\AddValidator;
 use JasminWeb\Jasmin\Command\BaseCommand;
+use JasminWeb\Jasmin\Command\FlushTrait;
 
 class MtRouter extends BaseCommand {
+  use FlushTrait;
+
   public const STATIC  = 'StaticMTRoute';
   public const DEFAULT = 'DefaultRoute';
   public const RANDOM = 'RandomRoundrobinMTRoute';

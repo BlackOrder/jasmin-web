@@ -4,8 +4,11 @@ namespace JasminWeb\Jasmin\Command\MoRouter;
 
 use JasminWeb\Jasmin\Command\AddValidator;
 use JasminWeb\Jasmin\Command\BaseCommand;
+use JasminWeb\Jasmin\Command\FlushTrait;
 
 class MoRouter extends BaseCommand {
+  use FlushTrait;
+
   public const STATIC  = 'StaticMORoute';
   public const DEFAULT = 'DefaultRoute';
   public const RANDOM = 'RandomRoundrobinMORoute';
