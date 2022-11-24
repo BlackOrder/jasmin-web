@@ -10,6 +10,6 @@ class EvalPyFilterValidator extends AddValidator {
    */
   public function getRequiredAttributes(): array
   {
-    return ['pyCode'];
+    return ['fid', 'pyCode'];
   }
 }

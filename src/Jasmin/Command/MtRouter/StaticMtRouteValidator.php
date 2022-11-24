@@ -10,6 +10,6 @@ class StaticMtRouteValidator extends AddValidator {
    */
   public function getRequiredAttributes(): array
   {
-    return ['filters', 'connector', 'order'];
+    return ['filters', 'connector', 'order', 'rate'];
   }
 }

@@ -10,6 +10,6 @@ class DefaultMtRouteValidator extends AddValidator {
    */
   public function getRequiredAttributes(): array
   {
-    return ['connector'];
+    return ['connector', 'rate'];
   }
 }

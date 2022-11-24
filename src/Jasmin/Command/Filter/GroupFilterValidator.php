@@ -10,6 +10,6 @@ class GroupFilterValidator extends AddValidator {
    */
   public function getRequiredAttributes(): array
   {
-    return ['gid'];
+    return ['fid', 'gid'];
   }
 }

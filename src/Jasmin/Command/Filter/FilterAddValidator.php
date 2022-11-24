@@ -11,7 +11,7 @@ class FilterAddValidator extends InternalAddValidator {
    */
   public function getRequiredAttributes(): array
   {
-    return ['fid', 'type'];
+    return ['type'];
   }
 
   /**

@@ -10,6 +10,6 @@ class ConnectorFilterValidator extends AddValidator {
    */
   public function getRequiredAttributes(): array
   {
-    return ['cid'];
+    return ['fid', 'cid'];
   }
 }

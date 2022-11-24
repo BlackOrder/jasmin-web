@@ -10,6 +10,6 @@ class DateIntervalFilterValidator extends AddValidator {
    */
   public function getRequiredAttributes(): array
   {
-    return ['dateInterval'];
+    return ['fid', 'dateInterval'];
   }
 }

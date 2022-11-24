@@ -10,6 +10,6 @@ class ShortMessageFilterValidator extends AddValidator {
    */
   public function getRequiredAttributes(): array
   {
-    return ['short_message'];
+    return ['fid', 'short_message'];
   }
 }

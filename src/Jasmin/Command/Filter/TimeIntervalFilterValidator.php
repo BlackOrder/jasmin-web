@@ -10,6 +10,6 @@ class TimeIntervalFilterValidator extends AddValidator {
    */
   public function getRequiredAttributes(): array
   {
-    return ['timeInterval'];
+    return ['fid', 'timeInterval'];
   }
 }

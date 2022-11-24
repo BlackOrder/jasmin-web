@@ -16,13 +16,29 @@ trait AddTrait {
       $errorStr = json_encode($validator->getErrors());
       return false;
     }
+    
+    // get direct validator's attributes as priority attributes.
+    $priority_options = $validator->getRequiredAttributes();
 
     $data = $this->prepareAttributes($data);
 
     $command = $this->getName() . ' -a';
     $command .= PHP_EOL;
 
+    // collect priorities first
     foreach ($data as $property_key => $property_value) {
+      if(false === array_search($property_key, $priority_options, false)){
+        continue;
+      }
+      $command .= $property_key . ' ' . $property_value;
+      $command .= PHP_EOL;
+    }
+
+    // rest of options
+    foreach ($data as $property_key => $property_value) {
+      if(false !== array_search($property_key, $priority_options, false)){
+        continue;
+      }
       $command .= $property_key . ' ' . $property_value;
       $command .= PHP_EOL;
     }

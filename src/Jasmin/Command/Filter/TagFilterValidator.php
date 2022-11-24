@@ -10,6 +10,6 @@ class TagFilterValidator extends AddValidator {
    */
   public function getRequiredAttributes(): array
   {
-    return ['tag'];
+    return ['fid', 'tag'];
   }
 }

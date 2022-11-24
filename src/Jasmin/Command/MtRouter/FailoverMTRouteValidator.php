@@ -10,6 +10,6 @@ class FailoverMTRouteValidator extends AddValidator {
    */
   public function getRequiredAttributes(): array
   {
-    return ['filters', 'connectors', 'order'];
+    return ['filters', 'connectors', 'order', 'rate'];
   }
 }

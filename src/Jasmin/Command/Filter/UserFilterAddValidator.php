@@ -10,6 +10,6 @@ class UserFilterAddValidator extends AddValidator {
    */
   public function getRequiredAttributes(): array
   {
-    return ['uid'];
+    return ['fid', 'uid'];
   }
 }

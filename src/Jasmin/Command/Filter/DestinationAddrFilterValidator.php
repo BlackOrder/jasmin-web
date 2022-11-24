@@ -10,6 +10,6 @@ class DestinationAddrFilterValidator extends AddValidator {
    */
   public function getRequiredAttributes(): array
   {
-    return ['destination_addr'];
+    return ['fid', 'destination_addr'];
   }
 }

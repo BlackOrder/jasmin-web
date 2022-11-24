@@ -10,6 +10,6 @@ class SourceAddrFilterValidator extends AddValidator {
    */
   public function getRequiredAttributes(): array
   {
-    return ['source_addr'];
+    return ['fid', 'source_addr'];
   }
 }
