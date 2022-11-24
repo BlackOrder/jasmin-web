@@ -37,19 +37,6 @@ trait ShowTrait {
         continue;
       }
 
-      $key = explode(' ', $key);
-
-      while (count($key) > 1) {
-        $tmpKey = array_pop($key);
-        if ($tmpKey == '=') {
-          continue;
-        }
-
-        $value = [$tmpKey => $value];
-      }
-
-      $key = $key[0];
-
       $options = array_merge_recursive($options, [$key => $value]);
     }
 
