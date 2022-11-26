@@ -22,14 +22,14 @@ class Session {
    *
    * @var bool
    */
-  public $defaultNeedPersist = false;
+  public $defaultNeedPersist = true;
 
   /**
    * Default isHeavy to be use in commands
    *
    * @var bool
    */
-  public $defaultHeavy = false;
+  public $defaultHeavy = true;
 
   /**
    * Session constructor.
