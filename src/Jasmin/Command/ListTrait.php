@@ -10,8 +10,16 @@ trait ListTrait {
   {
     $response = $this->session->runCommand($this->getName() . ' -l');
 
-    $exploded = explode('#', $response);
-    unset($exploded[0], $exploded[1]);
+    $exploded = explode(PHP_EOL, $response);
+    foreach ($exploded as $key => $value) {
+      if ($value[0] !== '#') {
+        unset($exploded[$key]);
+      } else {
+        ltrim($value[0], '#');
+      }
+    }
+    array_shift($exploded);
+
 
     return $this->parseList($exploded);
   }
