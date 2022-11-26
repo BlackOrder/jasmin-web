@@ -12,10 +12,10 @@ trait ListTrait {
 
     $exploded = explode(PHP_EOL, $response);
     foreach ($exploded as $key => $value) {
-      if ($value[0] !== '#') {
+      if (substr($value, 0, 1) !== '#') {
         unset($exploded[$key]);
       } else {
-        ltrim($value[0], '#');
+        $exploded[$key] = ltrim($value, '#');
       }
     }
     array_shift($exploded);
